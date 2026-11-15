@@ -1,0 +1,39 @@
+{
+  "rules": {
+    "CSharp.SyntaxDiagnostics": {
+      "enabled": true,
+      "severity": null,
+      "pattern": null
+    },
+    "CSharp.ConstantNaming": {
+      "enabled": true,
+      "severity": null,
+      "pattern": "^[A-Z][A-Z0-9_]*$"
+    },
+    "CSharp.NullDefault": {
+      "enabled": true,
+      "severity": null,
+      "pattern": null
+    },
+    "CSharp.EmptyCatch": {
+      "enabled": true,
+      "severity": null,
+      "pattern": null
+    },
+    "CSharp.UnbracedIf": {
+      "enabled": true,
+      "severity": null,
+      "pattern": null
+    },
+    "CSharp.DeferredWork": {
+      "enabled": true,
+      "severity": null,
+      "pattern": "\\b(TODO|FIXME)\\b"
+    },
+    "Sql.MigrationExistenceGuard": {
+      "enabled": true,
+      "severity": null,
+      "pattern": "\\bIF\\s\u002B(NOT\\s\u002B)?EXISTS\\b"
+    }
+  }
+}

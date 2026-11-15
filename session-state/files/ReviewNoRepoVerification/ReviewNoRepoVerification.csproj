@@ -1,0 +1,7 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup><OutputType>Exe</OutputType><TargetFramework>net11.0-windows</TargetFramework><ImplicitUsings>enable</ImplicitUsings><Nullable>enable</Nullable><UseWPF>true</UseWPF></PropertyGroup>
+  <ItemGroup>
+	<ProjectReference Include="D:\Provident Foundations\Products\XAML ID Verifier Proto\Visual Studio Toolset.csproj" />
+	<Resource Include="D:\Provident Foundations\Products\XAML ID Verifier Proto\App Icon Source 32 x 32.png" Link="App Icon Source 32 x 32.png" />
+  </ItemGroup>
+</Project>
