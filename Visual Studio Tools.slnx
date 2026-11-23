@@ -15,16 +15,13 @@
   <Project Path="../../../Adaptive.Intelligence/Framework/SQL Server UI Library/Adaptive.Intelligence.SqlServer.UI/Adaptive.Intelligence.SqlServer.UI.csproj">
     <Platform Solution="*|x64" Project="x64" />
   </Project>
-  <Project Path="../../Provident Foundations Visual Studio Windows Forms Controls Library/Provident Foundations Visual studio Windows Forms Controls Library.csproj">
-    <Platform Solution="*|x64" Project="x64" />
-  </Project>
-  <Project Path="../../Provident Visual Studio Framework/Provident Visual Studio Framework.csproj">
-    <Platform Solution="*|x64" Project="x64" />
-  </Project>
   <Project Path="../../Provident-Foundations-Framework/src/Core/Provident Foundations Framework/Provident.Foundations/Provident.Foundations.csproj">
     <Platform Solution="*|x64" Project="x64" />
   </Project>
   <Project Path="../../Provident-Foundations-Framework/src/SQL/Provident-Foundations-Sql-Framework/Provident Foundation SQL Framework/Provident Foundation SQL Framework.csproj">
+    <Platform Solution="*|x64" Project="x64" />
+  </Project>
+  <Project Path="../../Provident-Foundations-Framework/src/Visual Studio/Provident Visual Studio Framework/Provident Visual Studio Framework.csproj">
     <Platform Solution="*|x64" Project="x64" />
   </Project>
   <Project Path="../../Provident-Foundations-Framework/src/Windows/ui/Provident.Foundations.WinForms.Controls/Provident.Foundations.WinForms.Controls.csproj">
