@@ -257,13 +257,4 @@ public partial class ProjectValidationErrorList : ProvidentControlBase
         }
         Cursor = Cursors.Default;
     }
-
-
-    private enum DiagnosticSeverity
-    {
-        Error,
-        Warning,
-        Information,
-        File,
-    }
 }
