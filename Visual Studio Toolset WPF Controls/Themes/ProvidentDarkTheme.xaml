@@ -1,0 +1,195 @@
+﻿<ResourceDictionary
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:po="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options">
+
+	<SolidColorBrush
+		x:Key="WindowBrush"
+		po:Freeze="False"
+		Color="#FF192038" />
+	<SolidColorBrush
+		x:Key="SurfaceBrush"
+		po:Freeze="False"
+		Color="#FF202038" />
+	<SolidColorBrush
+		x:Key="RaisedBrush"
+		po:Freeze="False"
+		Color="#FF202040" />
+	<SolidColorBrush
+		x:Key="BorderBrush"
+		po:Freeze="False"
+		Color="#FFDBD3D7" />
+	<SolidColorBrush
+		x:Key="TitleTextBrush"
+		po:Freeze="False"
+		Color="#FFFFFFFF" />
+	<SolidColorBrush
+		x:Key="TextBrush"
+		po:Freeze="False"
+		Color="#FFDBD3D7" />
+	<SolidColorBrush
+		x:Key="MutedTextBrush"
+		po:Freeze="False"
+		Color="#FF9C9398" />
+	<SolidColorBrush
+		x:Key="AccentBrush"
+		po:Freeze="False"
+		Color="#FF3D3DE6" />
+	<SolidColorBrush
+		x:Key="SelectionBrush"
+		po:Freeze="False"
+		Color="#FF7B7BFF" />
+	<SolidColorBrush
+		x:Key="HoverBrush"
+		po:Freeze="False"
+		Color="#FF21215A" />
+	<SolidColorBrush
+		x:Key="EditorBackgroundBrush"
+		po:Freeze="False"
+		Color="#FF7D7B7B" />
+	<SolidColorBrush
+		x:Key="EditorForegroundBrush"
+		po:Freeze="False"
+		Color="#FF09A4F5" />
+	<SolidColorBrush
+		x:Key="OverlayBrush"
+		po:Freeze="False"
+		Color="#C0000032" />
+	<SolidColorBrush
+		x:Key="SeverityNeutralBrush"
+		po:Freeze="False"
+		Color="#FFB7B7BA" />
+	<SolidColorBrush
+		x:Key="SeverityErrorBrush"
+		po:Freeze="False"
+		Color="#FFF12C2C" />
+	<SolidColorBrush
+		x:Key="SeverityWarningBrush"
+		po:Freeze="False"
+		Color="#FFFFC107" />
+	<SolidColorBrush
+		x:Key="SeverityInformationBrush"
+		po:Freeze="False"
+		Color="#FF0A3661" />
+	<LinearGradientBrush x:Key="PanelGradient" StartPoint="0,0" EndPoint="1,0">
+		<GradientStop Offset="0" Color="#FFC0FFC0" />
+		<GradientStop Offset="1" Color="#FFC0C0FF" />
+	</LinearGradientBrush>
+	<LinearGradientBrush x:Key="FrameGradient" StartPoint="0,0" EndPoint="1,0">
+		<GradientStop Offset="0" Color="#FFDBD3D7" />
+		<GradientStop Offset="1" Color="#FF202038" />
+	</LinearGradientBrush>
+	<LinearGradientBrush x:Key="HeaderGradient" StartPoint="0,0" EndPoint="1,0">
+		<GradientStop Offset="0" Color="#FF202038" />
+		<GradientStop Offset="0.75" Color="#FF37377A" />
+		<GradientStop Offset="1" Color="#FF202038" />
+	</LinearGradientBrush>
+	<LinearGradientBrush x:Key="HeaderBarGradient" StartPoint="0,0" EndPoint="1,0">
+		<GradientStop Offset="0" Color="#FFDBD3D7" />
+		<GradientStop Offset="0.5" Color="#FF202038" />
+		<GradientStop Offset="1" Color="#FFDBD3D7" />
+	</LinearGradientBrush>
+	<LinearGradientBrush x:Key="ActionButtonGradient" StartPoint="0,0" EndPoint="1,0">
+		<GradientStop Offset="0" Color="#FFDBD3D7" />
+		<GradientStop Offset="1" Color="#FF202038" />
+	</LinearGradientBrush>
+	<LinearGradientBrush x:Key="CloseButtonGradient" StartPoint="0,0" EndPoint="1,0">
+		<GradientStop Offset="0" Color="#FFFFFFFF" />
+		<GradientStop Offset="1" Color="#FFFF8080" />
+	</LinearGradientBrush>
+	<Style x:Key="ActionButtonStyle" TargetType="Button">
+		<Setter Property="Width" Value="125" />
+		<Setter Property="Height" Value="40" />
+		<Setter Property="Padding" Value="6,3" />
+		<Setter Property="Background" Value="{StaticResource ActionButtonGradient}" />
+		<Setter Property="Foreground" Value="White" />
+		<Setter Property="BorderBrush" Value="#FF000080" />
+		<Setter Property="BorderThickness" Value="1" />
+		<Setter Property="FontFamily" Value="Segoe UI" />
+		<Setter Property="FontSize" Value="13" />
+		<Setter Property="HorizontalContentAlignment" Value="Left" />
+		<Setter Property="VerticalContentAlignment" Value="Center" />
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="Button">
+					<Border
+						x:Name="ButtonBorder"
+						Padding="{TemplateBinding Padding}"
+						Background="{TemplateBinding Background}"
+						BorderBrush="{TemplateBinding BorderBrush}"
+						BorderThickness="{TemplateBinding BorderThickness}">
+						<ContentPresenter
+							HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+							VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+							RecognizesAccessKey="True" />
+					</Border>
+					<ControlTemplate.Triggers>
+						<Trigger Property="IsMouseOver" Value="True">
+							<Setter TargetName="ButtonBorder" Property="Background">
+								<Setter.Value>
+									<LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+										<GradientStop Offset="0" Color="#FF80FF80" />
+										<GradientStop Offset="1" Color="#FF0000FF" />
+									</LinearGradientBrush>
+								</Setter.Value>
+							</Setter>
+							<Setter TargetName="ButtonBorder" Property="BorderBrush" Value="#FF1E90FF" />
+						</Trigger>
+						<Trigger Property="IsPressed" Value="True">
+							<Setter TargetName="ButtonBorder" Property="Opacity" Value="0.75" />
+						</Trigger>
+						<Trigger Property="IsEnabled" Value="False">
+							<Setter TargetName="ButtonBorder" Property="Opacity" Value="0.55" />
+							<Setter Property="Foreground" Value="Gray" />
+						</Trigger>
+					</ControlTemplate.Triggers>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
+	<Style
+		x:Key="CloseButtonStyle"
+		BasedOn="{StaticResource ActionButtonStyle}"
+		TargetType="Button">
+		<Setter Property="Background" Value="{StaticResource CloseButtonGradient}" />
+		<Setter Property="Foreground" Value="Black" />
+		<Setter Property="BorderBrush" Value="#FF800000" />
+		<Setter Property="HorizontalContentAlignment" Value="Center" />
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="Button">
+					<Border
+						x:Name="ButtonBorder"
+						Padding="{TemplateBinding Padding}"
+						Background="{TemplateBinding Background}"
+						BorderBrush="{TemplateBinding BorderBrush}"
+						BorderThickness="{TemplateBinding BorderThickness}">
+						<ContentPresenter
+							HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+							VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+							RecognizesAccessKey="True" />
+					</Border>
+					<ControlTemplate.Triggers>
+						<Trigger Property="IsMouseOver" Value="True">
+							<Setter TargetName="ButtonBorder" Property="Background">
+								<Setter.Value>
+									<LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+										<GradientStop Offset="0" Color="#FFE0E0E0" />
+										<GradientStop Offset="1" Color="#FFFFC0C0" />
+									</LinearGradientBrush>
+								</Setter.Value>
+							</Setter>
+							<Setter TargetName="ButtonBorder" Property="BorderBrush" Value="Red" />
+						</Trigger>
+						<Trigger Property="IsPressed" Value="True">
+							<Setter TargetName="ButtonBorder" Property="Opacity" Value="0.75" />
+						</Trigger>
+						<Trigger Property="IsEnabled" Value="False">
+							<Setter TargetName="ButtonBorder" Property="Opacity" Value="0.55" />
+						</Trigger>
+					</ControlTemplate.Triggers>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
+</ResourceDictionary>

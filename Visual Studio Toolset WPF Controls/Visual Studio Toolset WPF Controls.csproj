@@ -1,0 +1,89 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net11.0-windows</TargetFramework>
+    <RootNamespace>Visual.Studio.Toolset.UI</RootNamespace>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AssemblyName>Visual.Studio.Toolset.Wpf.Controls</AssemblyName>
+    <AssemblyTitle>WPF Controls Library for the Visual Studio Tools Application</AssemblyTitle>
+    <ApplicationIcon>ProvidentFoundations.ico</ApplicationIcon>
+    <PlatformTarget>x64</PlatformTarget>
+    <PackageId>Visual.Studio.Toolset.Wpf.Controls</PackageId>
+    <Title>WPF Controls Library for the Visual Studio Toolset Application</Title>
+    <Version>0.1.0.0</Version>
+    <Authors>Sam Jones</Authors>
+    <Company>Provident Foundations</Company>
+    <Product>Provident Foundations Visual Studio Toolset</Product>
+    <Description>A .NET WPF Controls Library for supporting the Visual Studio Toolset application.</Description>
+    <Copyright>Copyright © 2026 by Provident Foundations.  All rights reserved.</Copyright>
+    <PackageProjectUrl>https://samjones.azurewebsites.net</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/Provident-Foundations/Visual-Studio-Tools</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Controls\TextToHex\CancelDeleteIcons.png" />
+    <None Remove="Controls\TextToHex\TextToHexClear.png" />
+    <None Remove="Controls\TextToHex\TextToHexConvert.png" />
+    <None Remove="Controls\TextToHex\TextToHexCopy.png" />
+  </ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="AvalonEdit" Version="6.3.1.120" />
+		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
+		<PackageReference Include="Extended.Wpf.Toolkit" Version="5.1.2" />
+	</ItemGroup>
+  <ItemGroup>
+    <Content Include="ProvidentFoundations.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Provident-Foundations-Framework\src\Core\Provident Foundations Framework\Provident.Foundations\Provident.Foundations.csproj" />
+    <ProjectReference Include="..\..\..\Provident-Foundations-Framework\src\SQL\Provident-Visual-Studio-Framework\Provident Visual Studio Framework.csproj" />
+    <ProjectReference Include="..\..\..\Provident-Foundations-Framework\src\WPF\Provident.Foundations.Wpf.Controls\Provident.Foundations.Wpf.Controls.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Controls\TextToHex\TextToHexControl.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Menu\CodeMenuControl.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Menu\FileMenuControl.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Menu\HelpMenuControl.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Menu\SqlMenuControl.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Menu\ToolsMenuControl.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Menu\ViewMenuControl.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Controls\TextToHex\CancelDeleteIcons.png" />
+    <Resource Include="Controls\TextToHex\TextToHexClear.png" />
+    <Resource Include="Controls\TextToHex\TextToHexConvert.png" />
+    <Resource Include="Controls\TextToHex\TextToHexCopy.png" />
+    <Resource Include="Resources\TextToHexClear.png" />
+    <Resource Include="Resources\TextToHexConvert.png" />
+    <Resource Include="Resources\TextToHexCopy.png" />
+    <Resource Include="Resources\AppIconSource32.png" />
+    <Resource Include="Resources\CancelDeleteIcons.png" />
+    <Resource Include="Resources\Close16.png" />
+    <Resource Include="Resources\KeyLogo.png" />
+    <Resource Include="Resources\Radio.png" />
+    <Resource Include="Resources\SaveIcon.png" />
+    <Resource Include="Resources\SqlServerBanner.png" />
+    <Resource Include="Resources\WinAzureLogo.png" />
+  </ItemGroup>
+
+</Project>

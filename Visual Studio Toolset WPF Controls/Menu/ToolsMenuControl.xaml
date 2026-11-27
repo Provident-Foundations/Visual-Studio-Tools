@@ -1,0 +1,42 @@
+﻿<!--  File Menu  -->
+<MenuItem
+	x:Class="VS.Toolset.UI.Controls.Menu.ToolsMenuControl"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	Header="_Tools"
+	InputGestureText="Alt+T"
+	TabIndex="1"
+	Template="{StaticResource TopMenuItemTemplate}">
+
+	<MenuItem
+		x:Name="ToolsMenuTextToHexMenuItem"
+		Header="Text To _Hexadecimal"
+		Style="{StaticResource SubMenuItemStyle}"
+		TabIndex="1"
+		ToolTip="Convert text content to a hexadecimal representation of the UTF-8 byte array." />
+
+	<MenuItem
+		x:Name="ToolsMenuHextToTextMenuItem"
+		Header="Hexadecimal To _Text"
+		Style="{StaticResource SubMenuItemStyle}"
+		TabIndex="2"
+		ToolTip="Convert a hexadecimal value to a string representation." />
+
+	<Separator />
+
+	<MenuItem
+		x:Name="ToolsIforgotwhatgoeshere"
+		Header="_Iforgot what goes here"
+		Style="{StaticResource SubMenuItemStyle}"
+		TabIndex="3"
+		ToolTip="Convert text content to a hexadecimal representation of the UTF-8 byte array." />
+
+	<MenuItem
+		x:Name="ToolsQuickHashMenuItem"
+		Header="Generate _Quick Hash"
+		Style="{StaticResource SubMenuItemStyle}"
+		TabIndex="4"
+		ToolTip="Generate a hash value for a provided string value." />
+
+
+</MenuItem>

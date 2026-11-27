@@ -1,0 +1,88 @@
+﻿<!--  File Menu  -->
+<MenuItem
+	x:Class="VS.Toolset.UI.Controls.Menu.FileMenuControl"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	Header="_File"
+	InputGestureText="Alt+F"
+	Template="{StaticResource TopMenuItemTemplate}">
+
+	<!--  Open Visual Studio Solution  -->
+	<MenuItem
+		x:Name="FileMenuOpenSolutionMenuItem"
+		HorizontalContentAlignment="Stretch"
+		Command="{Binding OpenSolutionCommand}"
+		Header="_Open Solution..."
+		InputGestureText="Ctrl+Shift+O"
+		Style="{StaticResource SubMenuItemStyle}"
+		ToolTip="Click to open a Visual Studio Solution." />
+
+	<!--  Open Visual Studio Project  -->
+	<MenuItem
+		x:Name="FileMenuOpenProjectMenuItem"
+		HorizontalContentAlignment="Stretch"
+		Command="{Binding OpenProjectCommand}"
+		Foreground="{DynamicResource TextBrush}"
+		Header="_Open Project..."
+		InputGestureText="O"
+		Style="{StaticResource SubMenuItemStyle}"
+		ToolTip="Click to open a Visual Studio Project file." />
+
+	<Separator />
+
+	<!--  Create New SQL Maker Project  -->
+	<MenuItem
+		x:Name="SqlMenuNewMenuItem"
+		HorizontalContentAlignment="Stretch"
+		Command="{Binding CreateSqlProjectCommand}"
+		Foreground="{DynamicResource TextBrush}"
+		Header="_New SQL Maker Project..."
+		Style="{StaticResource SubMenuItemStyle}"
+		ToolTip="Click to create a SQL Maker project file." />
+
+	<!--  Open SQL Maker Project  -->
+	<MenuItem
+		x:Name="SqlMenuOpenMenuItem"
+		HorizontalContentAlignment="Stretch"
+		Command="{Binding OpenSqlProjectCommand}"
+		Foreground="{DynamicResource TextBrush}"
+		Header="_Open SQL Maker Project..."
+		Style="{StaticResource SubMenuItemStyle}"
+		ToolTip="Click to open a SQL Maker project file." />
+
+	<Separator />
+
+	<!--  General Close Item  -->
+	<MenuItem
+		HorizontalContentAlignment="Stretch"
+		Command="{Binding CloseCurrentDocumentCommand}"
+		Header="_Close"
+		Style="{StaticResource SubMenuItemStyle}"
+		Visibility="{Binding AnythingIsOpenVisibility}" />
+
+	<!--  Close Solution Item  -->
+	<MenuItem
+		HorizontalContentAlignment="Stretch"
+		Command="{Binding CloseSolutionCommand}"
+		Header="C_lose Solution"
+		Style="{StaticResource SubMenuItemStyle}"
+		Visibility="{Binding SolutionIsOpenVisibility}" />
+
+	<!--  Close SQL Maker Item  -->
+	<MenuItem
+		HorizontalContentAlignment="Stretch"
+		Command="{Binding CloseSqlProjectCommand}"
+		Header="Close S_ql Project"
+		Style="{StaticResource SubMenuItemStyle}"
+		Visibility="{Binding SqlOpenVisibility}" />
+
+	<Separator Visibility="{Binding AnythingIsOpenVisibility}" />
+
+	<!--  Exit Item  -->
+	<MenuItem
+		HorizontalContentAlignment="Stretch"
+		Command="{Binding ExitApplicationCommand}"
+		Header="E_xit"
+		InputGestureText="Alt+F4"
+		Style="{StaticResource SubMenuItemStyle}" />
+</MenuItem>

@@ -1,0 +1,8 @@
+﻿<!--  File Menu  -->
+<MenuItem
+	x:Class="VS.Toolset.UI.Controls.Menu.CodeMenuControl"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	Header="_Code"
+	InputGestureText="Alt+C"
+	Template="{StaticResource TopMenuItemTemplate}" />

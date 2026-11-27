@@ -27,4 +27,5 @@
     <Platform Solution="Debug|Any CPU" Project="x64" />
   </Project>
   <Project Path="test/VisualStudioToolset.Tests/VisualStudioToolset.Tests.csproj" />
+  <Project Path="Visual Studio Toolset WPF Controls/Visual Studio Toolset WPF Controls.csproj" Id="1dd0e45e-bc4c-43ec-8098-41589ba017a6" />
 </Solution>
