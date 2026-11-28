@@ -15,7 +15,7 @@
     <Version>0.5.0</Version>
     <Authors>Sam Jones</Authors>
     <Company>Provident Foundations</Company>
-    <Product>Vsisual Studio Toolset</Product>
+    <Product>Visual Studio Toolset</Product>
     <Description>Provides tools for editing code for Visual Studio and .NET projects.</Description>
     <Copyright>Copyright © 2026 by Provident Foundations.  All rights reserved.</Copyright>
     <NeutralLanguage>en-US</NeutralLanguage>
@@ -74,13 +74,10 @@
           <IncludeAssets>compile; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
 		<PackageReference Include="Microsoft.Build.Locator" PrivateAssets="all" Version="1.11.2" />
-	</ItemGroup>
-	<ItemGroup>
-	  <ProjectReference Include="..\..\Provident-Foundations-Framework\src\Core\Provident Foundations Framework\Provident.Foundations\Provident.Foundations.csproj" />
-	  <ProjectReference Include="..\..\Provident-Foundations-Framework\src\SQL\Provident-Foundations-Sql-Framework\Provident Foundation SQL Framework\Provident Foundation SQL Framework.csproj" />
-	  <ProjectReference Include="..\..\Provident-Foundations-Framework\src\SQL\Provident-Visual-Studio-Framework\Provident Visual Studio Framework.csproj" />
-	  <ProjectReference Include="..\..\Provident-Foundations-Framework\src\WPF\Provident.Foundations.Wpf.Controls\Provident.Foundations.Wpf.Controls.csproj" />
-	  <ProjectReference Include="..\Visual Studio Toolset WPF Controls\Visual Studio Toolset WPF Controls.csproj" />
+		<PackageReference Include="Provident.Foundations" Version="11.98.3" />
+		<PackageReference Include="Provident.Foundations.SqlServer" Version="11.98.3" />
+		<PackageReference Include="Provident.Foundations.VisualStudio" Version="11.98.3" />
+		<PackageReference Include="Provident.Foundations.Wpf.Controls" Version="11.98.3" />
 	</ItemGroup>
 
   <ItemGroup>
