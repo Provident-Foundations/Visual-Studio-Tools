@@ -1,0 +1,422 @@
+<base:ProvidentWindowBase
+	x:Class="VS.Toolset.UI.Dialogs.SqlConnectionWindow"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:base="clr-namespace:Provident.Foundations.Wpf.Controls;assembly=Provident.Foundations.Wpf.Controls"
+	Title="Connect to SQL Server"
+	Width="1024"
+	Height="760"
+	MinWidth="820"
+	MinHeight="660"
+	Background="{DynamicResource WindowBrush}"
+	Closing="OnClosing"
+	Foreground="{DynamicResource TextBrush}"
+	Icon="/Dialogs/Book Dictionary Information.ico"
+	ResizeMode="CanResize"
+	WindowStartupLocation="CenterOwner">
+	<Window.Resources>
+		<Style TargetType="Label">
+			<Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
+			<Setter Property="FontWeight" Value="SemiBold" />
+			<Setter Property="Padding" Value="0,0,0,5" />
+		</Style>
+		<Style TargetType="TextBox">
+			<Setter Property="Background" Value="{DynamicResource RaisedBrush}" />
+			<Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
+			<Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}" />
+			<Setter Property="BorderThickness" Value="1" />
+			<Setter Property="Padding" Value="8,6" />
+			<Setter Property="MinHeight" Value="36" />
+		</Style>
+		<Style TargetType="PasswordBox">
+			<Setter Property="Background" Value="{DynamicResource RaisedBrush}" />
+			<Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
+			<Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}" />
+			<Setter Property="BorderThickness" Value="1" />
+			<Setter Property="Padding" Value="8,6" />
+			<Setter Property="MinHeight" Value="36" />
+		</Style>
+		<Style TargetType="ComboBox">
+			<Setter Property="Background" Value="{DynamicResource RaisedBrush}" />
+			<Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
+			<Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}" />
+			<Setter Property="BorderThickness" Value="1" />
+			<Setter Property="Padding" Value="7,5" />
+			<Setter Property="MinHeight" Value="36" />
+		</Style>
+		<Style TargetType="Button">
+			<Setter Property="Background" Value="{DynamicResource SurfaceBrush}" />
+			<Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
+			<Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}" />
+			<Setter Property="BorderThickness" Value="1" />
+			<Setter Property="Padding" Value="14,7" />
+			<Setter Property="MinHeight" Value="38" />
+			<Setter Property="Template">
+				<Setter.Value>
+					<ControlTemplate TargetType="Button">
+						<Border
+							x:Name="ButtonBorder"
+							Padding="{TemplateBinding Padding}"
+							Background="{TemplateBinding Background}"
+							BorderBrush="{TemplateBinding BorderBrush}"
+							BorderThickness="{TemplateBinding BorderThickness}"
+							CornerRadius="3">
+							<ContentPresenter
+								HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+								VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+								RecognizesAccessKey="True" />
+						</Border>
+						<ControlTemplate.Triggers>
+							<Trigger Property="IsMouseOver" Value="True">
+								<Setter TargetName="ButtonBorder" Property="Background" Value="{DynamicResource HoverBrush}" />
+							</Trigger>
+							<Trigger Property="IsPressed" Value="True">
+								<Setter TargetName="ButtonBorder" Property="Opacity" Value="0.75" />
+							</Trigger>
+							<Trigger Property="IsEnabled" Value="False">
+								<Setter TargetName="ButtonBorder" Property="Opacity" Value="0.5" />
+							</Trigger>
+						</ControlTemplate.Triggers>
+					</ControlTemplate>
+				</Setter.Value>
+			</Setter>
+		</Style>
+		<Style
+			x:Key="PrimaryButtonStyle"
+			BasedOn="{StaticResource {x:Type Button}}"
+			TargetType="Button">
+			<Setter Property="Background" Value="{DynamicResource AccentBrush}" />
+			<Setter Property="Foreground" Value="White" />
+			<Setter Property="BorderBrush" Value="{DynamicResource AccentBrush}" />
+		</Style>
+		<Style x:Key="AuthCardStyle" TargetType="RadioButton">
+			<Setter Property="GroupName" Value="Authentication" />
+			<Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
+			<Setter Property="Padding" Value="14" />
+			<Setter Property="Margin" Value="0,0,10,0" />
+			<Setter Property="Template">
+				<Setter.Value>
+					<ControlTemplate TargetType="RadioButton">
+						<Border
+							x:Name="CardBorder"
+							Padding="{TemplateBinding Padding}"
+							Background="{DynamicResource SurfaceBrush}"
+							BorderBrush="{DynamicResource BorderBrush}"
+							BorderThickness="1"
+							CornerRadius="4">
+							<ContentPresenter VerticalAlignment="Center" />
+						</Border>
+						<ControlTemplate.Triggers>
+							<Trigger Property="IsChecked" Value="True">
+								<Setter TargetName="CardBorder" Property="BorderBrush" Value="{DynamicResource AccentBrush}" />
+								<Setter TargetName="CardBorder" Property="Background" Value="{DynamicResource SelectionBrush}" />
+							</Trigger>
+							<Trigger Property="IsMouseOver" Value="True">
+								<Setter TargetName="CardBorder" Property="BorderBrush" Value="{DynamicResource AccentBrush}" />
+							</Trigger>
+						</ControlTemplate.Triggers>
+					</ControlTemplate>
+				</Setter.Value>
+			</Setter>
+		</Style>
+	</Window.Resources>
+	<Window.Style>
+		<Style TargetType="Window">
+			<Setter Property="Background" Value="{DynamicResource WindowBrush}" />
+			<Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
+			<Style.Triggers>
+				<DataTrigger Binding="{Binding Source={x:Static SystemParameters.HighContrast}}" Value="True">
+					<Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.WindowBrushKey}}" />
+					<Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.WindowTextBrushKey}}" />
+				</DataTrigger>
+			</Style.Triggers>
+		</Style>
+	</Window.Style>
+	<Grid>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="275" />
+			<ColumnDefinition Width="*" />
+		</Grid.ColumnDefinitions>
+		<Border Grid.Column="0" Background="{DynamicResource PanelGradient}">
+			<DockPanel Margin="24,28,20,22">
+				<Image
+					HorizontalAlignment="Center"
+					VerticalAlignment="Center"
+					Source="/Dialogs/SqlServerBanner.png"
+					Stretch="UniformToFill"
+					StretchDirection="DownOnly" />
+			</DockPanel>
+		</Border>
+		<Border Grid.Column="1" Background="{DynamicResource SurfaceBrush}">
+			<DockPanel Margin="30,22,30,22">
+				<StackPanel Margin="0,0,0,16" DockPanel.Dock="Top">
+					<TextBlock
+						FontSize="30"
+						FontWeight="Bold"
+						Foreground="{DynamicResource TextBrush}"
+						Text="Connect to SQL Server" />
+					<TextBlock
+						Margin="0,4,0,14"
+						FontSize="14"
+						Foreground="{DynamicResource MutedTextBrush}"
+						Text="Connect to an existing SQL Server instance to manage your data." />
+					<Border Height="1" Background="{DynamicResource BorderBrush}" />
+				</StackPanel>
+				<StackPanel Margin="0,12,0,0" DockPanel.Dock="Bottom">
+					<Border
+						Margin="0,0,0,12"
+						Padding="14,10"
+						Background="{DynamicResource RaisedBrush}"
+						BorderBrush="{DynamicResource BorderBrush}"
+						BorderThickness="1"
+						CornerRadius="4">
+						<DockPanel>
+							<Image
+								HorizontalAlignment="Center"
+								VerticalAlignment="Center"
+								Source="/Dialogs/Radio.png"
+								Stretch="None"
+								StretchDirection="DownOnly" />
+							<TextBlock
+								Margin="0,0,14,0"
+								VerticalAlignment="Center"
+								FontSize="20"
+								FontWeight="Bold"
+								Foreground="{DynamicResource AccentBrush}"
+								Text="i" />
+							<StackPanel>
+								<TextBlock
+									FontWeight="SemiBold"
+									Foreground="{DynamicResource TextBrush}"
+									Text="Connection status" />
+								<TextBlock
+									x:Name="StatusText"
+									Margin="0,3,0,0"
+									AutomationProperties.LiveSetting="Polite"
+									Foreground="{DynamicResource MutedTextBrush}"
+									Text="Connection not tested. Click Test Connection to verify your settings."
+									TextWrapping="Wrap" />
+							</StackPanel>
+						</DockPanel>
+					</Border>
+					<ProgressBar
+						x:Name="Progress"
+						Height="3"
+						Margin="0,0,0,10"
+						IsIndeterminate="True"
+						Visibility="Collapsed" />
+					<DockPanel LastChildFill="False">
+						<Button
+							x:Name="TestButton"
+							Padding="14,7"
+							Click="TestClick"
+							Content="_Test connection"
+							DockPanel.Dock="Left" />
+						<Button
+							x:Name="ConnectButton"
+							Margin="8,0,0,0"
+							Padding="18,7"
+							Click="ConnectClick"
+							Content="_Connect   ›"
+							DockPanel.Dock="Right"
+							IsDefault="True"
+							Style="{StaticResource PrimaryButtonStyle}">
+							<Button.Background>
+								<LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
+									<GradientStop Color="#FF0378E3" />
+									<GradientStop Offset="1" Color="#FF0156C4" />
+									<GradientStop Offset="0.072" Color="#FF0375DA" />
+									<GradientStop Offset="0.668" Color="#FF006AC7" />
+								</LinearGradientBrush>
+							</Button.Background>
+						</Button>
+						<Button
+							x:Name="CancelButton"
+							Padding="14,7"
+							Click="CancelClick"
+							Content="Cancel"
+							DockPanel.Dock="Right" />
+					</DockPanel>
+				</StackPanel>
+				<ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+					<StackPanel x:Name="SettingsPanel">
+						<Label Content="_Server or instance" Target="{Binding ElementName=ServerText}" />
+						<TextBox
+							x:Name="ServerText"
+							Margin="0,0,0,4"
+							Padding="6" />
+						<TextBlock
+							Margin="0,0,0,14"
+							Foreground="{DynamicResource MutedTextBrush}"
+							Text="Examples: localhost, SQLSERVER01, localhost\SQLEXPRESS"
+							TextWrapping="Wrap" />
+						<Label Content="_Authentication" />
+						<UniformGrid Margin="0,0,0,14" Columns="2">
+							<RadioButton
+								x:Name="WindowsAuthentication"
+								Checked="AuthenticationChanged"
+								IsChecked="True"
+								Style="{StaticResource AuthCardStyle}">
+								<Grid>
+									<Grid.ColumnDefinitions>
+										<ColumnDefinition Width="48" />
+										<ColumnDefinition Width="*" />
+									</Grid.ColumnDefinitions>
+									<Image Source="/Dialogs/WinAzureLogo.png" />
+									<StackPanel Grid.Column="1" VerticalAlignment="Center">
+										<TextBlock FontWeight="SemiBold" Text="Windows Authentication" />
+										<TextBlock
+											Margin="0,4,0,0"
+											Foreground="{DynamicResource MutedTextBrush}"
+											Text="Use your Windows account to connect (recommended)"
+											TextWrapping="Wrap" />
+									</StackPanel>
+								</Grid>
+							</RadioButton>
+							<RadioButton
+								x:Name="SqlAuthentication"
+								Margin="0,0,0,0"
+								Checked="AuthenticationChanged"
+								Style="{StaticResource AuthCardStyle}">
+								<Grid>
+									<Grid.ColumnDefinitions>
+										<ColumnDefinition Width="48" />
+										<ColumnDefinition Width="*" />
+									</Grid.ColumnDefinitions>
+									<Image Source="/Dialogs/KeyLogo.png" />
+									<StackPanel Grid.Column="1" VerticalAlignment="Center">
+										<TextBlock FontWeight="SemiBold" Text="SQL Server Authentication" />
+										<TextBlock
+											Margin="0,4,0,0"
+											Foreground="{DynamicResource MutedTextBrush}"
+											Text="Use a SQL Server login and password"
+											TextWrapping="Wrap" />
+									</StackPanel>
+								</Grid>
+							</RadioButton>
+						</UniformGrid>
+						<StackPanel x:Name="ConnectedAsPanel" Margin="0,0,0,12">
+							<Label Content="Connected as" />
+							<TextBox x:Name="ConnectedAs" IsReadOnly="True" />
+						</StackPanel>
+						<StackPanel x:Name="CredentialsPanel" Visibility="Collapsed">
+							<Label Content="_User name" Target="{Binding ElementName=UserName}" />
+							<TextBox
+								x:Name="UserName"
+								Margin="0,0,0,12"
+								Padding="6" />
+							<Label
+								Padding="0,0,0,4"
+								Content="_Password"
+								Target="{Binding ElementName=Password}" />
+							<PasswordBox
+								x:Name="Password"
+								Margin="0,0,0,12"
+								Padding="6" />
+						</StackPanel>
+						<Label Content="_Database (optional)" Target="{Binding ElementName=Database}" />
+						<DockPanel Margin="0,0,0,12">
+							<Button
+								x:Name="BrowseButton"
+								Margin="8,0,0,0"
+								Padding="12,5"
+								Click="BrowseClick"
+								Content="_Browse"
+								DockPanel.Dock="Right" />
+							<ComboBox
+								x:Name="Database"
+								Padding="5"
+								IsEditable="True"
+								IsTextSearchEnabled="False" />
+						</DockPanel>
+						<Expander Header="Advanced options">
+							<StackPanel Margin="0,12,0,0">
+								<CheckBox
+									x:Name="Encrypt"
+									Margin="0,0,0,8"
+									Content="Encrypt connection"
+									IsChecked="True" />
+								<CheckBox
+									x:Name="TrustCertificate"
+									Margin="0,0,0,4"
+									Content="Trust server certificate"
+									IsChecked="True" />
+								<TextBlock
+									Margin="20,0,0,12"
+									Text="Only enable trust for a server you know; it bypasses certificate validation."
+									TextWrapping="Wrap" />
+								<CheckBox
+									x:Name="Pooling"
+									Margin="0,0,0,8"
+									Content="Enable connection pooling"
+									IsChecked="True" />
+								<CheckBox
+									x:Name="Mars"
+									Margin="0,0,0,8"
+									Content="Allow multiple active result sets (MARS)" />
+								<CheckBox
+									x:Name="Enlist"
+									Margin="0,0,0,12"
+									Content="Enlist in ambient transactions"
+									IsChecked="True" />
+								<Label
+									Padding="0,0,0,4"
+									Content="Connection timeout (seconds)"
+									Target="{Binding ElementName=Timeout}" />
+								<TextBox
+									x:Name="Timeout"
+									Margin="0,0,0,12"
+									Padding="6"
+									Text="15" />
+								<Label
+									Padding="0,0,0,4"
+									Content="Minimum pool size"
+									Target="{Binding ElementName=MinPool}" />
+								<TextBox
+									x:Name="MinPool"
+									Margin="0,0,0,12"
+									Padding="6"
+									Text="0" />
+								<Label
+									Padding="0,0,0,4"
+									Content="Maximum pool size"
+									Target="{Binding ElementName=MaxPool}" />
+								<TextBox
+									x:Name="MaxPool"
+									Margin="0,0,0,12"
+									Padding="6"
+									Text="100" />
+								<Label
+									Padding="0,0,0,4"
+									Content="Connection retry count (0–255)"
+									Target="{Binding ElementName=RetryCount}" />
+								<TextBox
+									x:Name="RetryCount"
+									Margin="0,0,0,12"
+									Padding="6"
+									Text="1" />
+								<Label
+									Padding="0,0,0,4"
+									Content="Retry interval in seconds (1–60)"
+									Target="{Binding ElementName=RetryInterval}" />
+								<TextBox
+									x:Name="RetryInterval"
+									Margin="0,0,0,12"
+									Padding="6"
+									Text="10" />
+								<Label
+									Padding="0,0,0,4"
+									Content="Packet size in bytes (512–32768)"
+									Target="{Binding ElementName=PacketSize}" />
+								<TextBox
+									x:Name="PacketSize"
+									Padding="6"
+									Text="8000" />
+							</StackPanel>
+						</Expander>
+					</StackPanel>
+				</ScrollViewer>
+			</DockPanel>
+		</Border>
+	</Grid>
+</base:ProvidentWindowBase>

@@ -1,0 +1,887 @@
+<controls:ProvidentWindowBase
+	x:Class="VS.Toolset.UI.MainWindow"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:avalonDock="http://schemas.xceed.com/wpf/xaml/avalondock"
+	xmlns:controls="clr-namespace:Provident.Foundations.Wpf.Controls;assembly=Provident.Foundations.Wpf.Controls"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:dockControls="clr-namespace:Xceed.Wpf.AvalonDock.Controls;assembly=Xceed.Wpf.AvalonDock"
+	xmlns:errorList="clr-namespace:Provident.Foundations.Wpf.Controls.ErrorList;assembly=Provident.Foundations.Wpf.Controls"
+	xmlns:ewpf="http://schemas.xceed.com/wpf/xaml/toolkit"
+	xmlns:local="clr-namespace:VS.Toolset.UI"
+	xmlns:menu="clr-namespace:VS.Toolset.UI.Controls.Menu"
+	xmlns:report="clr-namespace:VS.Toolset.UI.Controls"
+	xmlns:vstHex="clr-namespace:VS.Toolset.UI.Controls.TextToHex;assembly=Visual.Studio.Toolset.Wpf.Controls"
+	Title="Provident Foundations Visual Studio Tools"
+	Width="800"
+	Height="450"
+	AllowsTransparency="True"
+	Background="{DynamicResource WindowBrush}"
+	BorderBrush="{DynamicResource BorderBrush}"
+	Cursor="{Binding CursorState}"
+	FontSize="12"
+	Foreground="{DynamicResource TextBrush}"
+	Icon="/App Icon Source 32 x 32.png"
+	ScrollViewer.CanContentScroll="True"
+	WindowStartupLocation="CenterScreen"
+	WindowState="Maximized"
+	WindowStyle="None">
+	<controls:ProvidentWindowBase.Resources>
+		<Style x:Key="{x:Type Menu}" TargetType="{x:Type Menu}">
+			<Setter Property="OverridesDefaultStyle" Value="True" />
+			<Setter Property="SnapsToDevicePixels" Value="True" />
+			<Setter Property="Template">
+				<Setter.Value>
+					<ControlTemplate TargetType="{x:Type Menu}">
+						<Border
+							x:Name="CT_Border"
+							Background="Transparent"
+							BorderThickness="0">
+							<StackPanel
+								HorizontalAlignment="Left"
+								VerticalAlignment="Center"
+								ClipToBounds="True"
+								IsItemsHost="True"
+								Orientation="Horizontal" />
+						</Border>
+					</ControlTemplate>
+				</Setter.Value>
+			</Setter>
+		</Style>
+		<Style x:Key="WindowButtonStyle" TargetType="Button">
+			<Setter Property="Background" Value="Transparent" />
+			<Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
+			<Setter Property="BorderThickness" Value="0" />
+			<Setter Property="Template">
+				<Setter.Value>
+					<ControlTemplate TargetType="Button">
+						<Border
+							x:Name="ButtonBorder"
+							Padding="{TemplateBinding Padding}"
+							Background="{TemplateBinding Background}"
+							CornerRadius="3">
+							<ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+						</Border>
+						<ControlTemplate.Triggers>
+							<Trigger Property="IsMouseOver" Value="True">
+								<Setter TargetName="ButtonBorder" Property="Background" Value="{DynamicResource HoverBrush}" />
+							</Trigger>
+							<Trigger Property="IsKeyboardFocused" Value="True">
+								<Setter TargetName="ButtonBorder" Property="Background" Value="{DynamicResource SelectionBrush}" />
+							</Trigger>
+							<Trigger Property="IsEnabled" Value="False">
+								<Setter Property="Opacity" Value="0.45" />
+							</Trigger>
+						</ControlTemplate.Triggers>
+					</ControlTemplate>
+				</Setter.Value>
+			</Setter>
+		</Style>
+
+		<Style x:Key="DockButtonStyle" TargetType="Button">
+			<Setter Property="Width" Value="26" />
+			<Setter Property="Height" Value="26" />
+			<Setter Property="Margin" Value="1,0" />
+			<Setter Property="Background" Value="Transparent" />
+			<Setter Property="Foreground" Value="{DynamicResource MutedTextBrush}" />
+			<Setter Property="FontFamily" Value="Segoe MDL2 Assets" />
+			<Setter Property="FontSize" Value="12" />
+			<Setter Property="Template">
+				<Setter.Value>
+					<ControlTemplate TargetType="Button">
+						<Border
+							x:Name="Chrome"
+							Background="{TemplateBinding Background}"
+							CornerRadius="2">
+							<ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+						</Border>
+						<ControlTemplate.Triggers>
+							<Trigger Property="IsMouseOver" Value="True">
+								<Setter TargetName="Chrome" Property="Background" Value="{DynamicResource HoverBrush}" />
+								<Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
+							</Trigger>
+							<Trigger Property="IsPressed" Value="True">
+								<Setter TargetName="Chrome" Property="Background" Value="{DynamicResource SelectionBrush}" />
+							</Trigger>
+							<Trigger Property="IsKeyboardFocused" Value="True">
+								<Setter TargetName="Chrome" Property="Background" Value="{DynamicResource SelectionBrush}" />
+							</Trigger>
+							<Trigger Property="IsEnabled" Value="False">
+								<Setter Property="Opacity" Value="0.35" />
+							</Trigger>
+						</ControlTemplate.Triggers>
+					</ControlTemplate>
+				</Setter.Value>
+			</Setter>
+		</Style>
+		<Style x:Key="DockMenuButtonStyle" TargetType="dockControls:DropDownButton">
+			<Setter Property="Width" Value="26" />
+			<Setter Property="Height" Value="26" />
+			<Setter Property="Foreground" Value="{DynamicResource MutedTextBrush}" />
+			<Setter Property="FontFamily" Value="Segoe MDL2 Assets" />
+			<Setter Property="FontSize" Value="10" />
+			<Setter Property="Template">
+				<Setter.Value>
+					<ControlTemplate TargetType="dockControls:DropDownButton">
+						<Border
+							x:Name="Chrome"
+							Background="Transparent"
+							CornerRadius="2">
+							<ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+						</Border>
+						<ControlTemplate.Triggers>
+							<Trigger Property="IsMouseOver" Value="True">
+								<Setter TargetName="Chrome" Property="Background" Value="{DynamicResource HoverBrush}" />
+								<Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
+							</Trigger>
+							<Trigger Property="IsChecked" Value="True">
+								<Setter TargetName="Chrome" Property="Background" Value="{DynamicResource SelectionBrush}" />
+							</Trigger>
+							<Trigger Property="IsKeyboardFocused" Value="True">
+								<Setter TargetName="Chrome" Property="Background" Value="{DynamicResource SelectionBrush}" />
+							</Trigger>
+						</ControlTemplate.Triggers>
+					</ControlTemplate>
+				</Setter.Value>
+			</Setter>
+		</Style>
+		<Style TargetType="dockControls:AnchorablePaneTitle">
+			<Setter Property="Background" Value="{DynamicResource SurfaceBrush}" />
+			<Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
+			<Setter Property="Template">
+				<Setter.Value>
+					<ControlTemplate TargetType="dockControls:AnchorablePaneTitle">
+						<Border
+							Background="{TemplateBinding Background}"
+							BorderBrush="{DynamicResource BorderBrush}"
+							BorderThickness="0,0,0,1">
+							<Grid MinHeight="30">
+								<Grid.ColumnDefinitions>
+									<ColumnDefinition Width="*" />
+									<ColumnDefinition Width="Auto" />
+									<ColumnDefinition Width="Auto" />
+									<ColumnDefinition Width="Auto" />
+								</Grid.ColumnDefinitions>
+								<dockControls:DropDownControlArea
+									Margin="10,0,0,0"
+									VerticalAlignment="Center"
+									DropDownContextMenu="{Binding Model.Root.Manager.AnchorableContextMenu, RelativeSource={RelativeSource TemplatedParent}}"
+									DropDownContextMenuDataContext="{Binding LayoutItem, RelativeSource={RelativeSource TemplatedParent}}">
+									<ContentPresenter
+										Content="{Binding Model, RelativeSource={RelativeSource TemplatedParent}}"
+										ContentTemplate="{Binding Model.Root.Manager.AnchorableTitleTemplate, RelativeSource={RelativeSource TemplatedParent}}"
+										ContentTemplateSelector="{Binding Model.Root.Manager.AnchorableTitleTemplateSelector, RelativeSource={RelativeSource TemplatedParent}}" />
+								</dockControls:DropDownControlArea>
+								<dockControls:DropDownButton
+									Grid.Column="1"
+									Content="&#xE70D;"
+									DropDownContextMenu="{Binding Model.Root.Manager.AnchorableContextMenu, RelativeSource={RelativeSource TemplatedParent}}"
+									DropDownContextMenuDataContext="{Binding LayoutItem, RelativeSource={RelativeSource TemplatedParent}}"
+									Style="{StaticResource DockMenuButtonStyle}"
+									ToolTip="Window options" />
+								<Button
+									x:Name="AutoHideButton"
+									Grid.Column="2"
+									Command="{Binding LayoutItem.AutoHideCommand, RelativeSource={RelativeSource TemplatedParent}}"
+									Content="&#xE718;"
+									Style="{StaticResource DockButtonStyle}"
+									ToolTip="Auto hide" />
+								<Button
+									Grid.Column="3"
+									Command="{Binding LayoutItem.HideCommand, RelativeSource={RelativeSource TemplatedParent}}"
+									Content="&#xE106;"
+									Style="{StaticResource DockButtonStyle}"
+									ToolTip="Hide" />
+							</Grid>
+						</Border>
+						<ControlTemplate.Triggers>
+							<DataTrigger Binding="{Binding Model.IsAutoHidden, RelativeSource={RelativeSource Self}}" Value="True">
+								<Setter TargetName="AutoHideButton" Property="ToolTip" Value="Pin" />
+								<Setter TargetName="AutoHideButton" Property="LayoutTransform">
+									<Setter.Value>
+										<RotateTransform Angle="90" />
+									</Setter.Value>
+								</Setter>
+							</DataTrigger>
+						</ControlTemplate.Triggers>
+					</ControlTemplate>
+				</Setter.Value>
+			</Setter>
+		</Style>
+	</controls:ProvidentWindowBase.Resources>
+
+	<Grid Margin="3,3,3,3">
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="5" />
+			<ColumnDefinition Width="32" />
+			<ColumnDefinition Width="*" />
+			<ColumnDefinition Width="*" />
+			<ColumnDefinition Width="*" />
+			<ColumnDefinition Width="*" />
+			<ColumnDefinition Width="30" />
+			<ColumnDefinition Width="5" />
+
+		</Grid.ColumnDefinitions>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="32" />
+			<RowDefinition Height="*" />
+			<RowDefinition Height="*" />
+			<RowDefinition Height="*" />
+			<RowDefinition Height="50" />
+			<RowDefinition Height="*" />
+			<RowDefinition Height="*" />
+			<RowDefinition Height="*" />
+			<RowDefinition Height="32" />
+			<RowDefinition Height="32" />
+		</Grid.RowDefinitions>
+		<Grid
+			Grid.Row="0"
+			Grid.Column="0"
+			Grid.ColumnSpan="8"
+			Margin="0,2,0,0"
+			Background="{DynamicResource SurfaceBrush}">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="32" />
+				<ColumnDefinition Width="*" />
+				<ColumnDefinition Width="32" />
+				<ColumnDefinition Width="32" />
+				<ColumnDefinition Width="32" />
+			</Grid.ColumnDefinitions>
+
+			<!--  Application Icon  -->
+			<Image
+				Grid.Row="0"
+				Grid.Column="0"
+				Width="28"
+				Height="28"
+				Margin="0,0,0,0"
+				Source="/App Icon Source 32 x 32.png" />
+
+			<!--  Main Menu  -->
+			<Menu
+				x:Name="MainMenu"
+				Grid.Column="1"
+				Grid.ColumnSpan="1"
+				Margin="3,3,3,3"
+				Padding="2,2,2,2"
+				HorizontalAlignment="Left"
+				FontSize="12"
+				Foreground="{DynamicResource TextBrush}"
+				IsEnabled="{Binding IsIdle}">
+				<menu:FileMenuControl
+					x:Name="FileMenu"
+					DisplayMemberPath=""
+					ToolTip="Create, open, save, and close solutions and projects." />
+				<menu:ToolsMenuControl
+					x:Name="ToolsMenu"
+					DisplayMemberPath=""
+					ToolTip="Miscellaneous tools for code development." />
+				<MenuItem
+					Header="_SQL"
+					Template="{StaticResource TopMenuItemTemplate}"
+					ToolTip="SQL Server Operations and Code Generation">
+					<MenuItem
+						x:Name="SqlMenuGenerateSpMenuItem"
+						Header="_Generate CRUD Stored Procedures..."
+						Style="{StaticResource SubMenuItemStyle}"
+						Visibility="{Binding SqlOpenVisibility}" />
+					<MenuItem
+						x:Name="SqlMenuGenerateCodeMenuItem"
+						Header="_Generate C# Data Access Classes..."
+						Style="{StaticResource SubMenuItemStyle}"
+						Visibility="{Binding SqlOpenVisibility}" />
+				</MenuItem>
+				<MenuItem
+					Header="_View"
+					InputGestureText="Alt+V"
+					Template="{StaticResource TopMenuItemTemplate}"
+					ToolTip="Show and hide various window elements.">
+					<MenuItem
+						x:Name="SolutionExplorerMenuItem"
+						Click="HandleSolutionExplorerVisibilityClick"
+						Header="Solution _Explorer"
+						IsCheckable="True"
+						IsChecked="True"
+						Style="{StaticResource SubMenuItemStyle}" />
+					<MenuItem
+						x:Name="ErrorListMenuItem"
+						Click="HandleErrorListVisibilityClick"
+						Header="_Error List"
+						IsCheckable="True"
+						IsChecked="True"
+						Style="{StaticResource SubMenuItemStyle}" />
+					<MenuItem
+						x:Name="NamingAnalysisMenuItem"
+						Click="HandleNamingAnalysisVisibilityClick"
+						Header="_Naming Analysis"
+						IsCheckable="True"
+						IsChecked="True"
+						Style="{StaticResource SubMenuItemStyle}" />
+					<MenuItem
+						Command="{Binding ChangeThemeCommand}"
+						CommandParameter="Dark"
+						Header="Dark Theme"
+						IsCheckable="True"
+						IsChecked="{Binding IsDarkTheme, Mode=OneWay}"
+						Style="{StaticResource SubMenuItemStyle}" />
+					<MenuItem
+						Command="{Binding ChangeThemeCommand}"
+						CommandParameter="Light"
+						Header="Light Theme"
+						IsCheckable="True"
+						IsChecked="{Binding IsLightTheme, Mode=OneWay}"
+						Style="{StaticResource SubMenuItemStyle}" />
+					<Separator />
+					<MenuItem
+						Command="{Binding ChangeThemeCommand}"
+						CommandParameter="ProvidentDark"
+						Header="Provident Dark Theme"
+						IsCheckable="True"
+						IsChecked="{Binding IsProvidentDarkTheme, Mode=OneWay}"
+						Style="{StaticResource SubMenuItemStyle}" />
+					<MenuItem
+						Command="{Binding ChangeThemeCommand}"
+						CommandParameter="ProvidentLight"
+						Header="Provident Light Theme"
+						IsCheckable="True"
+						IsChecked="{Binding IsProvidentLightTheme, Mode=OneWay}"
+						Style="{StaticResource SubMenuItemStyle}" />
+
+				</MenuItem>
+				<MenuItem
+					HorizontalContentAlignment="Stretch"
+					Header="_Validation"
+					InputGestureText="Ctrl+Alt+V"
+					Template="{StaticResource TopMenuItemTemplate}"
+					ToolTip="Perform validations"
+					Visibility="{Binding SolutionIsOpenVisibility}">
+
+					<MenuItem
+						HorizontalContentAlignment="Stretch"
+						Command="{Binding ValidateStyleIdsCommand}"
+						Header="_Validate XAML Style IDs"
+						Style="{StaticResource SubMenuItemStyle}"
+						Visibility="{Binding SolutionIsOpenVisibility}" />
+
+					<MenuItem
+						HorizontalContentAlignment="Stretch"
+						Command="{Binding NamingAnalyzerCommand}"
+						Header="_Analyze Solution Naming"
+						Style="{StaticResource SubMenuItemStyle}"
+						Visibility="{Binding SolutionIsOpenVisibility}" />
+
+					<MenuItem
+						Command="{Binding ProjectNamingCommand}"
+						Header="Analyze Selected _Project Naming"
+						Style="{StaticResource SubMenuItemStyle}" />
+
+					<MenuItem
+						Command="{Binding ExportNamingCommand}"
+						Header="_Export Naming Report..."
+						Style="{StaticResource SubMenuItemStyle}" />
+
+				</MenuItem>
+
+				<MenuItem
+					Header="_Code Review"
+					Template="{StaticResource TopMenuItemTemplate}"
+					Visibility="{Binding SolutionIsOpenVisibility}">
+					<MenuItem
+						Command="{Binding ReviewCommand}"
+						CommandParameter="All"
+						Header="Review _All Categories"
+						Style="{StaticResource SubMenuItemStyle}" />
+					<MenuItem
+						Command="{Binding ReviewCommand}"
+						CommandParameter="Naming"
+						Header="A. Naming"
+						Style="{StaticResource SubMenuItemStyle}" />
+					<MenuItem
+						Command="{Binding ReviewCommand}"
+						CommandParameter="Nullability"
+						Header="B. Nullability and Defaults"
+						Style="{StaticResource SubMenuItemStyle}" />
+					<MenuItem
+						Command="{Binding ReviewCommand}"
+						CommandParameter="Database"
+						Header="C. Database and Migrations"
+						Style="{StaticResource SubMenuItemStyle}" />
+					<MenuItem
+						Command="{Binding ReviewCommand}"
+						CommandParameter="Architecture"
+						Header="D. Architecture and Layering"
+						Style="{StaticResource SubMenuItemStyle}" />
+					<MenuItem
+						Command="{Binding ReviewCommand}"
+						CommandParameter="ErrorHandling"
+						Header="E. Errors and Observability"
+						Style="{StaticResource SubMenuItemStyle}" />
+					<MenuItem
+						Command="{Binding ReviewCommand}"
+						CommandParameter="CodeQuality"
+						Header="F. Code Quality"
+						Style="{StaticResource SubMenuItemStyle}" />
+					<MenuItem
+						Command="{Binding ReviewCommand}"
+						CommandParameter="Testing"
+						Header="G. Testing"
+						Style="{StaticResource SubMenuItemStyle}" />
+					<MenuItem
+						Command="{Binding ReviewCommand}"
+						CommandParameter="Completeness"
+						Header="H. Completeness"
+						Style="{StaticResource SubMenuItemStyle}" />
+					<MenuItem
+						Command="{Binding ReviewCommand}"
+						CommandParameter="DependencyInjection"
+						Header="I. Dependency Injection"
+						Style="{StaticResource SubMenuItemStyle}" />
+					<MenuItem
+						Command="{Binding ReviewCommand}"
+						CommandParameter="ControlFlow"
+						Header="J. Control Flow"
+						Style="{StaticResource SubMenuItemStyle}" />
+					<MenuItem
+						Command="{Binding ReviewCommand}"
+						CommandParameter="Reuse"
+						Header="K. Reuse"
+						Style="{StaticResource SubMenuItemStyle}" />
+					<Separator />
+					<MenuItem
+						Command="{Binding EditReviewRulesCommand}"
+						Header="_Edit Rules..."
+						Style="{StaticResource SubMenuItemStyle}" />
+					<MenuItem
+						Command="{Binding ExportReviewCommand}"
+						Header="_Save Review Report..."
+						Style="{StaticResource SubMenuItemStyle}" />
+				</MenuItem>
+			</Menu>
+			<Button
+				x:Name="MinButton"
+				Grid.Column="2"
+				Width="28"
+				HorizontalAlignment="Right"
+				HorizontalContentAlignment="Center"
+				Background="Transparent"
+				BorderThickness="0"
+				Command="{Binding MinimizeCommand}"
+				Content="&#xE949;"
+				FontFamily="Segoe MDL2 Assets"
+				Foreground="{DynamicResource TextBrush}"
+				Style="{StaticResource WindowButtonStyle}" />
+			<!--
+				Max: &#xE739
+				Restore: &#xE923
+			-->
+			<Button
+				x:Name="MaxButton"
+				Grid.Column="3"
+				Width="28"
+				HorizontalAlignment="Right"
+				HorizontalContentAlignment="Center"
+				Background="Transparent"
+				BorderThickness="0"
+				Command="{Binding MaximizeCommand}"
+				Content="&#xE923;"
+				FontFamily="Segoe MDL2 Assets"
+				Foreground="{DynamicResource TextBrush}"
+				Style="{StaticResource WindowButtonStyle}" />
+
+			<Button
+				x:Name="CloseButton"
+				Grid.Column="4"
+				Width="28"
+				HorizontalAlignment="Right"
+				HorizontalContentAlignment="Center"
+				Background="Transparent"
+				BorderThickness="0"
+				Command="{Binding CloseCommand}"
+				Content="&#xE106;"
+				FontFamily="Segoe MDL2 Assets"
+				Foreground="{DynamicResource TextBrush}"
+				Style="{StaticResource WindowButtonStyle}" />
+		</Grid>
+
+		<avalonDock:DockingManager
+			Grid.Row="1"
+			Grid.RowSpan="8"
+			Grid.Column="0"
+			Grid.ColumnSpan="8"
+			Background="{DynamicResource WindowBrush}">
+			<avalonDock:LayoutRoot>
+				<avalonDock:LayoutPanel Orientation="Horizontal">
+					<avalonDock:LayoutPanel Orientation="Vertical">
+						<avalonDock:LayoutAnchorablePane>
+							<avalonDock:LayoutAnchorable
+								x:Name="NamingAnalysisPane"
+								Title="Naming Analysis"
+								CanClose="False"
+								CanHide="True"
+								ContentId="NamingAnalysis">
+								<TabControl
+									Margin="4"
+									Background="{DynamicResource WindowBrush}"
+									BorderBrush="{DynamicResource BorderBrush}"
+									Foreground="{DynamicResource TextBrush}"
+									Visibility="{Binding NamingWindowVisibility}">
+									<TabControl.Resources>
+										<Style TargetType="TabItem">
+											<Setter Property="Padding" Value="14,8" />
+											<Setter Property="Template">
+												<Setter.Value>
+													<ControlTemplate TargetType="TabItem">
+														<Border
+															x:Name="TabBorder"
+															Padding="{TemplateBinding Padding}"
+															Background="{DynamicResource SurfaceBrush}"
+															BorderBrush="Transparent"
+															BorderThickness="0,0,0,2">
+															<ContentPresenter ContentSource="Header" RecognizesAccessKey="True" />
+														</Border>
+														<ControlTemplate.Triggers>
+															<Trigger Property="IsMouseOver" Value="True">
+																<Setter TargetName="TabBorder" Property="Background" Value="{DynamicResource HoverBrush}" />
+															</Trigger>
+															<Trigger Property="IsSelected" Value="True">
+																<Setter TargetName="TabBorder" Property="Background" Value="{DynamicResource WindowBrush}" />
+																<Setter TargetName="TabBorder" Property="BorderBrush" Value="{DynamicResource AccentBrush}" />
+															</Trigger>
+															<Trigger Property="IsKeyboardFocused" Value="True">
+																<Setter TargetName="TabBorder" Property="BorderBrush" Value="{DynamicResource AccentBrush}" />
+															</Trigger>
+														</ControlTemplate.Triggers>
+													</ControlTemplate>
+												</Setter.Value>
+											</Setter>
+										</Style>
+										<Style TargetType="DataGrid">
+											<Setter Property="Background" Value="{DynamicResource WindowBrush}" />
+											<Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
+											<Setter Property="BorderThickness" Value="0" />
+											<Setter Property="RowBackground" Value="{DynamicResource WindowBrush}" />
+											<Setter Property="AlternatingRowBackground" Value="{DynamicResource SurfaceBrush}" />
+											<Setter Property="HorizontalGridLinesBrush" Value="{DynamicResource BorderBrush}" />
+											<Setter Property="GridLinesVisibility" Value="Horizontal" />
+											<Setter Property="HeadersVisibility" Value="Column" />
+											<Setter Property="RowHeaderWidth" Value="0" />
+											<Setter Property="CanUserResizeRows" Value="False" />
+											<Setter Property="MinRowHeight" Value="30" />
+										</Style>
+										<Style TargetType="DataGridColumnHeader">
+											<Setter Property="Background" Value="{DynamicResource RaisedBrush}" />
+											<Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
+											<Setter Property="Padding" Value="10,8" />
+											<Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}" />
+											<Setter Property="BorderThickness" Value="0,0,1,1" />
+										</Style>
+										<Style TargetType="DataGridCell">
+											<Setter Property="Padding" Value="10,5" />
+											<Setter Property="BorderThickness" Value="0" />
+											<Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
+											<Style.Triggers>
+												<Trigger Property="IsSelected" Value="True">
+													<Setter Property="Background" Value="{DynamicResource SelectionBrush}" />
+													<Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
+												</Trigger>
+											</Style.Triggers>
+										</Style>
+									</TabControl.Resources>
+									<TabItem Header="Report">
+										<report:NamingReportView Result="{Binding NamingResult}" />
+									</TabItem>
+									<TabItem
+										Background="{DynamicResource WindowBrush}"
+										Foreground="{DynamicResource TextBrush}"
+										Header="Naming Summary"
+										Visibility="Collapsed">
+										<ScrollViewer VerticalScrollBarVisibility="Auto">
+											<StackPanel Margin="20" DataContext="{Binding NamingResult}">
+												<StackPanel.Resources>
+													<Style TargetType="TextBlock">
+														<Setter Property="Margin" Value="0,0,0,6" />
+														<Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
+													</Style>
+												</StackPanel.Resources>
+												<TextBlock
+													Margin="0,0,0,16"
+													FontSize="20"
+													FontWeight="SemiBold"
+													Text="Naming analysis" />
+												<TextBlock Text="{Binding Target.Scope, StringFormat=Scope: {0}}" />
+												<TextBlock Text="{Binding Target.Name, StringFormat=Target: {0}}" />
+												<TextBlock Text="{Binding Status, StringFormat=Status: {0}}" />
+												<TextBlock Text="{Binding Statistics.FileCount, StringFormat=Files considered: {0}}" />
+												<TextBlock Text="{Binding Statistics.ParsedFileCount, StringFormat=Files parsed: {0}}" />
+												<TextBlock Text="{Binding Statistics.IdentifierCount, StringFormat=Names: {0}}" />
+												<TextBlock Text="{Binding Statistics.DeclarationCount, StringFormat=Declarations: {0}}" />
+												<TextBlock Text="{Binding Statistics.ReferenceCount, StringFormat=References: {0}}" />
+												<TextBlock Text="{Binding Statistics.ViolationCount, StringFormat=Violations: {0}}" />
+												<TextBlock Text="{Binding Duration, StringFormat=Duration: {0}}" />
+												<TextBlock
+													Margin="0,12,0,0"
+													Foreground="{DynamicResource MutedTextBrush}"
+													Text="Patterns are inferred from observed names; inspect diagnostics for files or projects that could not be analyzed. C# analysis is syntax-based and does not resolve references."
+													TextWrapping="Wrap" />
+											</StackPanel>
+										</ScrollViewer>
+									</TabItem>
+									<TabItem
+										Background="{DynamicResource WindowBrush}"
+										Foreground="{DynamicResource TextBrush}"
+										Header="Patterns"
+										Visibility="Collapsed">
+										<DataGrid
+											AutoGenerateColumns="False"
+											CanUserAddRows="False"
+											IsReadOnly="True"
+											ItemsSource="{Binding NamingResult.Patterns}">
+											<DataGrid.Columns>
+												<DataGridTextColumn Binding="{Binding Scope.SymbolKind}" Header="Kind" />
+												<DataGridTextColumn Binding="{Binding Scope.Language}" Header="Language" />
+												<DataGridTextColumn Binding="{Binding DominantStyle}" Header="Dominant style" />
+												<DataGridTextColumn Binding="{Binding ObservationCount}" Header="Names" />
+												<DataGridTextColumn Binding="{Binding MatchingCount}" Header="Matching" />
+												<DataGridTextColumn Binding="{Binding NonMatchingCount}" Header="Other" />
+												<DataGridTextColumn Binding="{Binding Confidence, StringFormat=P0}" Header="Confidence" />
+												<DataGridCheckBoxColumn Binding="{Binding IsMixed}" Header="Mixed" />
+												<DataGridCheckBoxColumn Binding="{Binding HasInsufficientEvidence}" Header="Insufficient evidence" />
+											</DataGrid.Columns>
+										</DataGrid>
+									</TabItem>
+									<TabItem
+										Background="{DynamicResource WindowBrush}"
+										Foreground="{DynamicResource TextBrush}"
+										Header="Names"
+										Visibility="Collapsed">
+										<DataGrid
+											AutoGenerateColumns="False"
+											CanUserAddRows="False"
+											IsReadOnly="True"
+											ItemsSource="{Binding NamingResult.Observations}"
+											MouseDoubleClick="HandleNamingRowDoubleClick">
+											<DataGrid.Columns>
+												<DataGridTextColumn Binding="{Binding Name}" Header="Name" />
+												<DataGridTextColumn Binding="{Binding Kind}" Header="Kind" />
+												<DataGridTextColumn Binding="{Binding Role}" Header="Role" />
+												<DataGridTextColumn Binding="{Binding Classification.Style}" Header="Style" />
+												<DataGridTextColumn Binding="{Binding SourceFile.Project.Name}" Header="Project" />
+												<DataGridTextColumn Binding="{Binding Location.FilePath}" Header="File" />
+												<DataGridTextColumn Binding="{Binding Location.StartLine}" Header="Line" />
+											</DataGrid.Columns>
+										</DataGrid>
+									</TabItem>
+									<TabItem
+										Background="{DynamicResource WindowBrush}"
+										Foreground="{DynamicResource TextBrush}"
+										Header="Violations"
+										Visibility="Collapsed">
+										<DataGrid
+											AutoGenerateColumns="False"
+											CanUserAddRows="False"
+											IsReadOnly="True"
+											ItemsSource="{Binding NamingResult.Violations}"
+											MouseDoubleClick="HandleNamingRowDoubleClick">
+											<DataGrid.Columns>
+												<DataGridTextColumn Binding="{Binding Severity}" Header="Severity" />
+												<DataGridTextColumn Binding="{Binding Name}" Header="Name" />
+												<DataGridTextColumn Binding="{Binding ExpectedStyle}" Header="Expected" />
+												<DataGridTextColumn Binding="{Binding ActualStyle}" Header="Actual" />
+												<DataGridTextColumn Binding="{Binding SuggestedName}" Header="Suggested" />
+												<DataGridTextColumn Binding="{Binding Message}" Header="Reason" />
+												<DataGridTextColumn Binding="{Binding Project.Name}" Header="Project" />
+												<DataGridTextColumn Binding="{Binding Location.FilePath}" Header="File" />
+												<DataGridTextColumn Binding="{Binding Location.StartLine}" Header="Line" />
+											</DataGrid.Columns>
+										</DataGrid>
+									</TabItem>
+									<TabItem
+										Background="{DynamicResource WindowBrush}"
+										Foreground="{DynamicResource TextBrush}"
+										Header="Projects"
+										Visibility="Collapsed">
+										<DataGrid
+											AutoGenerateColumns="False"
+											CanUserAddRows="False"
+											IsReadOnly="True"
+											ItemsSource="{Binding NamingResult.Projects}">
+											<DataGrid.Columns>
+												<DataGridTextColumn Binding="{Binding Project.Name}" Header="Project" />
+												<DataGridTextColumn Binding="{Binding Status}" Header="Status" />
+												<DataGridTextColumn Binding="{Binding Result.Statistics.ParsedFileCount}" Header="Files parsed" />
+												<DataGridTextColumn Binding="{Binding Result.Statistics.IdentifierCount}" Header="Names" />
+												<DataGridTextColumn Binding="{Binding Result.Statistics.ViolationCount}" Header="Violations" />
+											</DataGrid.Columns>
+										</DataGrid>
+									</TabItem>
+									<TabItem
+										Background="{DynamicResource WindowBrush}"
+										Foreground="{DynamicResource TextBrush}"
+										Header="Diagnostics"
+										Visibility="Collapsed">
+										<DataGrid
+											AutoGenerateColumns="False"
+											CanUserAddRows="False"
+											IsReadOnly="True"
+											ItemsSource="{Binding NamingResult.Diagnostics}">
+											<DataGrid.Columns>
+												<DataGridTextColumn Binding="{Binding Severity}" Header="Severity" />
+												<DataGridTextColumn Binding="{Binding Code}" Header="Code" />
+												<DataGridTextColumn Binding="{Binding Message}" Header="Message" />
+												<DataGridTextColumn Binding="{Binding Detail}" Header="Detail" />
+												<DataGridTextColumn Binding="{Binding ProjectPath}" Header="Project" />
+											</DataGrid.Columns>
+										</DataGrid>
+									</TabItem>
+								</TabControl>
+							</avalonDock:LayoutAnchorable>
+							<avalonDock:LayoutAnchorable
+								x:Name="TextToHexPane"
+								Title="Text To Hexadecimal"
+								CanClose="False"
+								CanHide="True"
+								ContentId="TextToHex">
+								<Frame
+									x:Name="TextToHexFrame"
+									DataContext="{x:Null}"
+									NavigationUIVisibility="Hidden" />
+							</avalonDock:LayoutAnchorable>
+							<avalonDock:LayoutAnchorable
+								x:Name="HexToTextPane"
+								Title="Hexadecimal To Text"
+								CanClose="False"
+								CanHide="True"
+								ContentId="HexToText">
+								<vstHex:TextToHexControl
+									x:Name="TextToHex"
+									DataContext="{x:Null}"
+									Visibility="Collapsed" />
+							</avalonDock:LayoutAnchorable>
+							<avalonDock:LayoutAnchorable
+								x:Name="ColorEditorPane"
+								Title="Color Editor"
+								CanClose="False"
+								CanHide="True"
+								ContentId="ColorEditor">
+								<Frame
+									x:Name="ColorEditorFrame"
+									DataContext="{x:Null}"
+									NavigationUIVisibility="Hidden" />
+							</avalonDock:LayoutAnchorable>
+							<avalonDock:LayoutAnchorable
+								x:Name="QuickHashPane"
+								Title="Hash Generator"
+								CanClose="False"
+								CanHide="True"
+								ContentId="QuickHash">
+								<Frame
+									x:Name="QuickHashFrame"
+									DataContext="{x:Null}"
+									NavigationUIVisibility="Hidden" />
+							</avalonDock:LayoutAnchorable>
+						</avalonDock:LayoutAnchorablePane>
+						<avalonDock:LayoutAnchorablePane DockHeight="220">
+							<avalonDock:LayoutAnchorable
+								x:Name="ErrorListPane"
+								Title="Error List"
+								CanClose="False"
+								CanHide="True"
+								ContentId="ErrorList">
+								<errorList:ErrorListControl
+									x:Name="ErrorList"
+									Margin="4"
+									Results="{Binding Errors}"
+									Visibility="{Binding SolutionIsOpenVisibility}" />
+							</avalonDock:LayoutAnchorable>
+						</avalonDock:LayoutAnchorablePane>
+					</avalonDock:LayoutPanel>
+					<avalonDock:LayoutAnchorablePane DockWidth="280">
+						<avalonDock:LayoutAnchorable
+							x:Name="SolutionExplorerPane"
+							Title="Solution Explorer"
+							CanClose="False"
+							CanHide="True"
+							ContentId="SolutionExplorer">
+							<controls:SolutionExplorerControl
+								x:Name="Explorer"
+								Width="Auto"
+								Solution="{Binding Solution}"
+								Visibility="{Binding SolutionIsOpenVisibility}">
+								<controls:SolutionExplorerControl.Resources>
+									<Style BasedOn="{StaticResource DockButtonStyle}" TargetType="Button">
+										<Setter Property="ToolTip" Value="Close solution" />
+									</Style>
+								</controls:SolutionExplorerControl.Resources>
+							</controls:SolutionExplorerControl>
+						</avalonDock:LayoutAnchorable>
+					</avalonDock:LayoutAnchorablePane>
+				</avalonDock:LayoutPanel>
+			</avalonDock:LayoutRoot>
+		</avalonDock:DockingManager>
+
+		<Border
+			x:Name="PleaseWaitPanel"
+			Grid.Row="1"
+			Grid.RowSpan="8"
+			Grid.Column="0"
+			Grid.ColumnSpan="8"
+			Background="{DynamicResource OverlayBrush}"
+			Visibility="{Binding BusyVisibility}">
+			<Border
+				Padding="24,24,24,12"
+				HorizontalAlignment="Center"
+				VerticalAlignment="Center"
+				Background="{DynamicResource SurfaceBrush}"
+				BorderBrush="{DynamicResource AccentBrush}"
+				BorderThickness="1"
+				CornerRadius="8">
+				<StackPanel MinWidth="320">
+					<TextBlock
+						FontSize="16"
+						Foreground="{DynamicResource TextBrush}"
+						Text="{Binding Status}"
+						TextWrapping="Wrap" />
+					<ProgressBar
+						Height="8"
+						Margin="0,16,0,16"
+						Background="{DynamicResource RaisedBrush}"
+						Foreground="{DynamicResource AccentBrush}"
+						IsIndeterminate="True" />
+					<Button
+						MinHeight="32"
+						Padding="14,6"
+						HorizontalAlignment="Right"
+						Background="{DynamicResource RaisedBrush}"
+						Command="{Binding CancelNamingCommand}"
+						Content="Cancel"
+						Foreground="{DynamicResource TextBrush}"
+						IsEnabled="{Binding IsNamingAnalysisRunning}"
+						Style="{StaticResource WindowButtonStyle}" FontSize="16" />
+				</StackPanel>
+			</Border>
+		</Border>
+		<Grid
+			x:Name="StatusBar"
+			Grid.Row="9"
+			Grid.Column="0"
+			Grid.ColumnSpan="10"
+			Background="{DynamicResource SurfaceBrush}">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="16" />
+				<ColumnDefinition Width="*" />
+				<ColumnDefinition Width="*" />
+				<ColumnDefinition Width="*" />
+				<ColumnDefinition Width="16" />
+			</Grid.ColumnDefinitions>
+
+			<Label
+				x:Name="StatusLabel"
+				Grid.Column="1"
+				Grid.ColumnSpan="2"
+				HorizontalAlignment="Left"
+				Content="{Binding Status}"
+				FontSize="10"
+				Foreground="{DynamicResource TextBrush}" />
+		</Grid>
+	</Grid>
+</controls:ProvidentWindowBase>

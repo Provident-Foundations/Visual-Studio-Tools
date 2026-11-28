@@ -1,0 +1,114 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net11.0-windows</TargetFramework>
+    <RootNamespace>VS.Toolset.UI</RootNamespace>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+    <Platforms>AnyCPU;x64</Platforms>
+    <AssemblyName>VSToolset</AssemblyName>
+    <AssemblyTitle>Provident Foundations Visual Studio Toolset</AssemblyTitle>
+    <PackageId>PF.VS.Toolset.UI</PackageId>
+    <Title>Provident Foundations Visual Studio Toolset</Title>
+    <Version>0.5.0</Version>
+    <Authors>Sam Jones</Authors>
+    <Company>Provident Foundations</Company>
+    <Product>Vsisual Studio Toolset</Product>
+    <Description>Provides tools for editing code for Visual Studio and .NET projects.</Description>
+    <Copyright>Copyright © 2026 by Provident Foundations.  All rights reserved.</Copyright>
+    <NeutralLanguage>en-US</NeutralLanguage>
+    <EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
+    <DisableMSBuildAssemblyCopyCheck>true</DisableMSBuildAssemblyCopyCheck>
+    <ApplicationIcon>ProvidentFoundations.ico</ApplicationIcon>
+    <RepositoryUrl>https://github.com/Provident-Foundations/Visual-Studio-Tools</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Visual Studio Toolset WPF Controls\**" />
+    <EmbeddedResource Remove="Visual Studio Toolset WPF Controls\**" />
+    <None Remove="Visual Studio Toolset WPF Controls\**" />
+    <Page Remove="Visual Studio Toolset WPF Controls\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="App Icon Source 32 x 32.png" />
+    <None Remove="Dialogs\Book Dictionary Information.ico" />
+    <None Remove="Dialogs\Cancel Delete Icons 1.png" />
+    <None Remove="Dialogs\Close 16x16.png" />
+    <None Remove="Dialogs\KeyLogo.png" />
+    <None Remove="Dialogs\Radio.png" />
+    <None Remove="Dialogs\Save Icons 3.png" />
+    <None Remove="Dialogs\SqlServerBanner.png" />
+    <None Remove="Dialogs\TextToHexClear.png" />
+    <None Remove="Dialogs\TextToHexConvert.png" />
+    <None Remove="Dialogs\TextToHexCopy.png" />
+    <None Remove="Dialogs\WinAzureLogo.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="ProvidentFoundations.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AvalonEdit" Version="6.3.1.120" />
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
+    <PackageReference Include="Extended.Wpf.Toolkit" Version="5.1.2" />
+  </ItemGroup>
+	<ItemGroup>
+        <PackageReference Include="Microsoft.Build" ExcludeAssets="runtime" PrivateAssets="all" Version="18.12.2">
+          <IncludeAssets>compile; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Microsoft.Build.Framework" ExcludeAssets="runtime" PrivateAssets="all" Version="18.12.2">
+          <IncludeAssets>compile; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Microsoft.Build.Utilities.Core" ExcludeAssets="runtime" PrivateAssets="all" Version="18.12.2">
+          <IncludeAssets>compile; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Microsoft.Build.Tasks.Core" ExcludeAssets="runtime" PrivateAssets="all" Version="18.12.2">
+          <IncludeAssets>compile; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Microsoft.NET.StringTools" ExcludeAssets="runtime" PrivateAssets="all" Version="18.12.2">
+          <IncludeAssets>compile; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+		<PackageReference Include="Microsoft.Build.Locator" PrivateAssets="all" Version="1.11.2" />
+	</ItemGroup>
+	<ItemGroup>
+	  <ProjectReference Include="..\..\Provident-Foundations-Framework\src\Core\Provident Foundations Framework\Provident.Foundations\Provident.Foundations.csproj" />
+	  <ProjectReference Include="..\..\Provident-Foundations-Framework\src\SQL\Provident-Foundations-Sql-Framework\Provident Foundation SQL Framework\Provident Foundation SQL Framework.csproj" />
+	  <ProjectReference Include="..\..\Provident-Foundations-Framework\src\SQL\Provident-Visual-Studio-Framework\Provident Visual Studio Framework.csproj" />
+	  <ProjectReference Include="..\..\Provident-Foundations-Framework\src\WPF\Provident.Foundations.Wpf.Controls\Provident.Foundations.Wpf.Controls.csproj" />
+	  <ProjectReference Include="..\Visual Studio Toolset WPF Controls\Visual Studio Toolset WPF Controls.csproj" />
+	</ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="App Icon Source 32 x 32.png" />
+    <Resource Include="Controls\TextToHex\TextToHexClear.png" />
+    <Resource Include="Controls\TextToHex\TextToHexConvert.png" />
+    <Resource Include="Controls\TextToHex\TextToHexCopy.png" />
+    <Resource Include="Dialogs\Book Dictionary Information.ico" />
+    <Resource Include="Dialogs\Cancel Delete Icons 1.png" />
+    <Resource Include="Dialogs\Close 16x16.png" />
+    <Resource Include="Dialogs\KeyLogo.png" />
+    <Resource Include="Dialogs\Radio.png" />
+    <Resource Include="Dialogs\Save Icons 3.png" />
+    <Resource Include="Dialogs\SqlServerBanner.png" />
+    <Resource Include="Dialogs\ToolWindowPages\TextToHex\TextToHexClear.png" />
+    <Resource Include="Dialogs\ToolWindowPages\TextToHex\TextToHexConvert.png" />
+    <Resource Include="Dialogs\ToolWindowPages\TextToHex\TextToHexCopy.png" />
+    <Resource Include="Dialogs\WinAzureLogo.png" />
+	  <Resource Include="Fonts\Cinzel-Black.ttf" />
+	  <Resource Include="Fonts\Cinzel-Bold.ttf" />
+	  <Resource Include="Fonts\Cinzel-Regular.ttf" />
+	  
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Controls\HexToText\" />
+    <Folder Include="Controls\ColorEditor\" />
+    <Folder Include="Controls\QuickHash\" />
+  </ItemGroup>
+
+</Project>

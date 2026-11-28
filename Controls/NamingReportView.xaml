@@ -1,0 +1,410 @@
+<UserControl x:Class="VS.Toolset.UI.Controls.NamingReportView"
+			 x:Name="ReportRoot"
+						 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+						 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+						 xmlns:local="clr-namespace:VS.Toolset.UI.Controls"
+						 Background="{DynamicResource WindowBrush}"
+						 Foreground="{DynamicResource TextBrush}"
+						 FontFamily="Segoe UI"
+						 FontSize="12"
+						 UseLayoutRounding="True"
+						 SnapsToDevicePixels="True">
+	<UserControl.Resources>
+		<Style x:Key="Card" TargetType="Border">
+			<Setter Property="Background" Value="{DynamicResource SurfaceBrush}" />
+			<Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}" />
+			<Setter Property="BorderThickness" Value="1" />
+			<Setter Property="CornerRadius" Value="8" />
+			<Setter Property="Padding" Value="16" />
+			<Setter Property="Margin" Value="6" />
+		</Style>
+		<Style x:Key="Heading" TargetType="TextBlock">
+			<Setter Property="FontSize" Value="16" />
+			<Setter Property="FontWeight" Value="SemiBold" />
+			<Setter Property="Margin" Value="0,0,0,10" />
+			<Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
+		</Style>
+		<Style x:Key="Eyebrow" TargetType="TextBlock">
+			<Setter Property="FontSize" Value="10" />
+			<Setter Property="FontWeight" Value="Bold" />
+			<Setter Property="Foreground" Value="{DynamicResource MutedTextBrush}" />
+			<Setter Property="Margin" Value="0,0,0,5" />
+		</Style>
+		<Style x:Key="MetricCard" TargetType="Border" BasedOn="{StaticResource Card}">
+			<Setter Property="MinWidth" Value="142" />
+			<Setter Property="Padding" Value="14,12" />
+			<Setter Property="BorderThickness" Value="1,1,1,3" />
+			<Setter Property="BorderBrush" Value="{DynamicResource AccentBrush}" />
+		</Style>
+		<SolidColorBrush x:Key="ReportHeaderBackgroundBrush" Color="#0F2D52" />
+		<SolidColorBrush x:Key="ReportHeaderForegroundBrush" Color="#FFFFFF" />
+		<SolidColorBrush x:Key="ReportHeaderMutedBrush" Color="#D7E3F3" />
+		<DataTemplate x:Key="DistributionBarTemplate">
+			<StackPanel Margin="0,4,0,6" AutomationProperties.Name="{Binding Label}">
+				<DockPanel Margin="0,0,0,3">
+					<TextBlock Text="{Binding Label}" TextTrimming="CharacterEllipsis" ToolTip="{Binding Label}" />
+					<TextBlock DockPanel.Dock="Right" Text="{Binding Count, StringFormat=N0}" FontWeight="SemiBold" Margin="8,0,0,0" />
+				</DockPanel>
+				<ProgressBar Height="8" Minimum="0" Value="{Binding Count}" Maximum="{Binding Maximum}" Foreground="{DynamicResource AccentBrush}" Background="{DynamicResource RaisedBrush}" AutomationProperties.Name="{Binding Label}" AutomationProperties.HelpText="{Binding Count, StringFormat=Count: {0}}" />
+			</StackPanel>
+		</DataTemplate>
+		<Style x:Key="SeverityText" TargetType="TextBlock">
+			<Setter Property="Foreground" Value="{DynamicResource SeverityNeutralBrush}" />
+			<Setter Property="FontWeight" Value="SemiBold" />
+			<Style.Triggers>
+				<DataTrigger Binding="{Binding Severity}" Value="Error"><Setter Property="Foreground" Value="{DynamicResource SeverityErrorBrush}" /></DataTrigger>
+				<DataTrigger Binding="{Binding Severity}" Value="Warning"><Setter Property="Foreground" Value="{DynamicResource SeverityWarningBrush}" /></DataTrigger>
+				<DataTrigger Binding="{Binding Severity}" Value="Information"><Setter Property="Foreground" Value="{DynamicResource SeverityInformationBrush}" /></DataTrigger>
+			</Style.Triggers>
+		</Style>
+		<Style x:Key="StatusText" TargetType="TextBlock">
+			<Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
+			<Style.Triggers>
+				<DataTrigger Binding="{Binding Result.Status}" Value="Partial"><Setter Property="Foreground" Value="{DynamicResource SeverityWarningBrush}" /></DataTrigger>
+				<DataTrigger Binding="{Binding Result.Status}" Value="Failed"><Setter Property="Foreground" Value="{DynamicResource SeverityErrorBrush}" /></DataTrigger>
+				<DataTrigger Binding="{Binding Result.Status}" Value="Canceled"><Setter Property="Foreground" Value="{DynamicResource SeverityWarningBrush}" /></DataTrigger>
+			</Style.Triggers>
+		</Style>
+		<Style TargetType="Button">
+			<Setter Property="MinHeight" Value="32" />
+			<Setter Property="Padding" Value="12,6" />
+			<Setter Property="Margin" Value="3" />
+			<Setter Property="Background" Value="{DynamicResource RaisedBrush}" />
+			<Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
+			<Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}" />
+			<Setter Property="BorderThickness" Value="1" />
+			<Setter Property="Cursor" Value="Hand" />
+			<Style.Triggers>
+				<Trigger Property="IsMouseOver" Value="True"><Setter Property="Background" Value="{DynamicResource HoverBrush}" /><Setter Property="BorderBrush" Value="{DynamicResource AccentBrush}" /></Trigger>
+				<Trigger Property="IsKeyboardFocused" Value="True"><Setter Property="BorderBrush" Value="{DynamicResource AccentBrush}" /><Setter Property="BorderThickness" Value="2" /></Trigger>
+				<Trigger Property="IsEnabled" Value="False"><Setter Property="Opacity" Value="0.55" /><Setter Property="Cursor" Value="Arrow" /></Trigger>
+			</Style.Triggers>
+		</Style>
+		<Style TargetType="TextBox">
+			<Setter Property="MinHeight" Value="32" />
+			<Setter Property="Padding" Value="9,5" />
+			<Setter Property="Background" Value="{DynamicResource WindowBrush}" />
+			<Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
+			<Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}" />
+			<Setter Property="BorderThickness" Value="1" />
+			<Style.Triggers><Trigger Property="IsKeyboardFocused" Value="True"><Setter Property="BorderBrush" Value="{DynamicResource AccentBrush}" /><Setter Property="BorderThickness" Value="2" /></Trigger></Style.Triggers>
+		</Style>
+		<Style TargetType="ComboBox">
+			<Setter Property="MinHeight" Value="32" />
+			<Setter Property="Padding" Value="8,4" />
+			<Setter Property="Background" Value="{DynamicResource WindowBrush}" />
+			<Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
+			<Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}" />
+		</Style>
+		<Style TargetType="TabControl">
+			<Setter Property="Background" Value="{DynamicResource WindowBrush}" />
+			<Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
+			<Setter Property="BorderThickness" Value="0" />
+			<Setter Property="Padding" Value="0" />
+		</Style>
+		<Style TargetType="TabItem">
+			<Setter Property="Padding" Value="14,9" />
+			<Setter Property="Margin" Value="2,0" />
+			<Setter Property="FontWeight" Value="SemiBold" />
+			<Setter Property="Foreground" Value="{DynamicResource MutedTextBrush}" />
+			<Setter Property="Template">
+				<Setter.Value>
+					<ControlTemplate TargetType="TabItem">
+						<Border x:Name="TabSurface" Background="Transparent" BorderBrush="Transparent" BorderThickness="0,0,0,2" Padding="{TemplateBinding Padding}">
+							<ContentPresenter ContentSource="Header" RecognizesAccessKey="True" HorizontalAlignment="Center" VerticalAlignment="Center" />
+						</Border>
+						<ControlTemplate.Triggers>
+							<Trigger Property="IsSelected" Value="True"><Setter TargetName="TabSurface" Property="Background" Value="{DynamicResource SurfaceBrush}" /><Setter TargetName="TabSurface" Property="BorderBrush" Value="{DynamicResource AccentBrush}" /><Setter Property="Foreground" Value="{DynamicResource TextBrush}" /></Trigger>
+							<Trigger Property="IsMouseOver" Value="True"><Setter TargetName="TabSurface" Property="Background" Value="{DynamicResource HoverBrush}" /><Setter Property="Foreground" Value="{DynamicResource TextBrush}" /></Trigger>
+							<Trigger Property="IsKeyboardFocused" Value="True"><Setter TargetName="TabSurface" Property="BorderBrush" Value="{DynamicResource AccentBrush}" /></Trigger>
+							<Trigger Property="IsEnabled" Value="False"><Setter Property="Opacity" Value="0.55" /></Trigger>
+						</ControlTemplate.Triggers>
+					</ControlTemplate>
+				</Setter.Value>
+			</Setter>
+		</Style>
+		<Style TargetType="DataGrid">
+			<Setter Property="AutoGenerateColumns" Value="False" />
+			<Setter Property="IsReadOnly" Value="True" />
+			<Setter Property="CanUserAddRows" Value="False" />
+			<Setter Property="EnableRowVirtualization" Value="True" />
+			<Setter Property="EnableColumnVirtualization" Value="True" />
+			<Setter Property="VirtualizingPanel.IsVirtualizing" Value="True" />
+			<Setter Property="VirtualizingPanel.VirtualizationMode" Value="Recycling" />
+			<Setter Property="ScrollViewer.CanContentScroll" Value="True" />
+			<Setter Property="Background" Value="{DynamicResource WindowBrush}" />
+			<Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
+			<Setter Property="RowBackground" Value="{DynamicResource WindowBrush}" />
+			<Setter Property="AlternatingRowBackground" Value="{DynamicResource SurfaceBrush}" />
+			<Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}" />
+			<Setter Property="BorderThickness" Value="0" />
+			<Setter Property="HeadersVisibility" Value="Column" />
+			<Setter Property="GridLinesVisibility" Value="Horizontal" />
+			<Setter Property="HorizontalGridLinesBrush" Value="{DynamicResource BorderBrush}" />
+			<Setter Property="MinRowHeight" Value="34" />
+			<Setter Property="CanUserResizeRows" Value="False" />
+			<Setter Property="SelectionUnit" Value="FullRow" />
+			<Setter Property="SelectionMode" Value="Single" />
+			<Setter Property="AlternationCount" Value="2" />
+		</Style>
+		<Style TargetType="DataGridRow">
+			<Setter Property="BorderThickness" Value="0" />
+			<Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
+			<Style.Triggers>
+				<Trigger Property="IsMouseOver" Value="True"><Setter Property="Background" Value="{DynamicResource HoverBrush}" /></Trigger>
+				<Trigger Property="IsSelected" Value="True"><Setter Property="Background" Value="{DynamicResource SelectionBrush}" /><Setter Property="Foreground" Value="{DynamicResource TextBrush}" /></Trigger>
+				<MultiDataTrigger><MultiDataTrigger.Conditions><Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource Self}}" Value="True" /><Condition Binding="{Binding IsHighContrast, RelativeSource={RelativeSource AncestorType={x:Type local:NamingReportView}}}" Value="True" /></MultiDataTrigger.Conditions><Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" /><Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}" /></MultiDataTrigger>
+			</Style.Triggers>
+		</Style>
+		<Style TargetType="DataGridColumnHeader">
+			<Setter Property="Background" Value="{DynamicResource RaisedBrush}" />
+			<Setter Property="Foreground" Value="{DynamicResource MutedTextBrush}" />
+			<Setter Property="FontWeight" Value="SemiBold" />
+			<Setter Property="Padding" Value="10,9" />
+			<Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}" />
+			<Setter Property="BorderThickness" Value="0,0,0,1" />
+		</Style>
+		<Style TargetType="DataGridCell" BasedOn="{StaticResource {x:Type DataGridCell}}">
+			<Setter Property="Padding" Value="10,6" />
+			<Setter Property="BorderThickness" Value="0" />
+			<Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
+			<Style.Triggers>
+				<Trigger Property="IsSelected" Value="True"><Setter Property="Background" Value="{DynamicResource SelectionBrush}" /><Setter Property="Foreground" Value="{DynamicResource TextBrush}" /></Trigger>
+				<MultiDataTrigger><MultiDataTrigger.Conditions><Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource Self}}" Value="True" /><Condition Binding="{Binding IsHighContrast, RelativeSource={RelativeSource AncestorType={x:Type local:NamingReportView}}}" Value="True" /></MultiDataTrigger.Conditions><Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" /><Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}" /></MultiDataTrigger>
+			</Style.Triggers>
+		</Style>
+		<Style TargetType="TextBlock" />
+		<Style x:Key="SectionEmptyState" TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
+			<Setter Property="Visibility" Value="Collapsed" />
+			<Setter Property="HorizontalAlignment" Value="Center" />
+			<Setter Property="VerticalAlignment" Value="Center" />
+			<Setter Property="TextWrapping" Value="Wrap" />
+			<Setter Property="IsHitTestVisible" Value="False" />
+			<Style.Triggers>
+				<DataTrigger Binding="{Binding HasResult}" Value="False"><Setter Property="Text" Value="Run an analysis to view results." /><Setter Property="Visibility" Value="Visible" /></DataTrigger>
+				<MultiDataTrigger><MultiDataTrigger.Conditions><Condition Binding="{Binding HasResult}" Value="True" /><Condition Binding="{Binding Tag.IsEmpty, RelativeSource={RelativeSource Self}}" Value="True" /></MultiDataTrigger.Conditions><Setter Property="Text" Value="No entries were reported in this section." /><Setter Property="Visibility" Value="Visible" /></MultiDataTrigger>
+				<MultiDataTrigger><MultiDataTrigger.Conditions><Condition Binding="{Binding HasResult}" Value="True" /><Condition Binding="{Binding Tag.IsNoMatch, RelativeSource={RelativeSource Self}}" Value="True" /></MultiDataTrigger.Conditions><Setter Property="Text" Value="No results match the current filters." /><Setter Property="Visibility" Value="Visible" /></MultiDataTrigger>
+			</Style.Triggers>
+		</Style>
+	</UserControl.Resources>
+	<Grid DataContext="{Binding Report, ElementName=ReportRoot}">
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="*" />
+		</Grid.RowDefinitions>
+		<Border Grid.Row="0" Margin="10,10,10,4" Padding="16,12" Background="{DynamicResource ReportHeaderBackgroundBrush}" BorderBrush="{DynamicResource ReportHeaderBackgroundBrush}" BorderThickness="1" CornerRadius="10">
+			<Grid>
+				<Grid.RowDefinitions><RowDefinition Height="Auto" /><RowDefinition Height="Auto" /><RowDefinition Height="Auto" /></Grid.RowDefinitions>
+				<Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+				<StackPanel Grid.Row="0" Grid.Column="0" VerticalAlignment="Center">
+					<TextBlock Text="PROVIDENT FOUNDATIONS  /  DEVELOPER TOOLS" FontSize="10" FontWeight="Bold" Foreground="{DynamicResource ReportHeaderMutedBrush}" />
+					<TextBlock Text="Naming Analysis Report" FontSize="24" FontWeight="SemiBold" Foreground="{DynamicResource ReportHeaderForegroundBrush}" />
+					<TextBlock Text="{Binding Result.Target.Name, TargetNullValue=Run an analysis to get started}" Foreground="{DynamicResource ReportHeaderMutedBrush}" TextTrimming="CharacterEllipsis" ToolTip="{Binding Result.Target.Path}" />
+				</StackPanel>
+				<StackPanel Grid.Row="0" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="12,0,0,0">
+					<Border Padding="10,5" CornerRadius="12" Background="Transparent" BorderBrush="{DynamicResource ReportHeaderMutedBrush}" BorderThickness="1" HorizontalAlignment="Right">
+						<TextBlock Text="{Binding Result.Status, TargetNullValue=NOT STARTED, StringFormat={}{0}}" Foreground="{DynamicResource ReportHeaderForegroundBrush}" FontWeight="SemiBold" />
+					</Border>
+					<TextBlock Text="{Binding Result.Duration, StringFormat=Duration: {0}}" Foreground="{DynamicResource ReportHeaderMutedBrush}" HorizontalAlignment="Right" Margin="0,5,0,0" />
+				</StackPanel>
+				<Border Grid.Row="1" Grid.ColumnSpan="2" Height="1" Margin="0,12,0,8" Background="#49617D" />
+				<WrapPanel Grid.Row="2" Grid.ColumnSpan="2" VerticalAlignment="Center">
+					<Button Content="Analyze solution" Margin="0,0,6,0" Background="{DynamicResource AccentBrush}" BorderBrush="{DynamicResource AccentBrush}" Command="{Binding DataContext.NamingAnalyzerCommand, ElementName=ReportRoot}" AutomationProperties.Name="Analyze the solution for naming conventions" />
+					<Button Content="Analyze selected project" Margin="0,0,6,0" Command="{Binding DataContext.ProjectNamingCommand, ElementName=ReportRoot}" />
+					<Button Content="Run again" Margin="0,0,6,0" Command="{Binding DataContext.RerunNamingCommand, ElementName=ReportRoot}" ToolTip="Repeat the last scope using the current settings." />
+					<Button Content="Settings" Margin="0,0,6,0" Command="{Binding DataContext.NamingSettingsCommand, ElementName=ReportRoot}" />
+					<Button Content="Cancel" Margin="0,0,6,0" Command="{Binding DataContext.CancelNamingCommand, ElementName=ReportRoot}" />
+					<Button Content="Export" Margin="0" Command="{Binding DataContext.ExportNamingCommand, ElementName=ReportRoot}" ToolTip="Export the summary JSON or violations CSV." />
+				</WrapPanel>
+			</Grid>
+		</Border>
+		<StackPanel Grid.Row="1" Margin="12,4,12,6">
+			<Border Padding="10,7" CornerRadius="6" BorderThickness="1,0,0,1" BorderBrush="{DynamicResource AccentBrush}" Background="{DynamicResource SurfaceBrush}">
+				<TextBlock Text="{Binding DataContext.NamingReportStatus, ElementName=ReportRoot}" TextWrapping="Wrap" AutomationProperties.LiveSetting="Polite" />
+			</Border>
+			<TextBlock Text="A naming analysis is in progress. Any displayed report is from the previous run." TextWrapping="Wrap" FontWeight="SemiBold" Margin="4,4,0,0">
+				<TextBlock.Style>
+					<Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
+							<Setter Property="Visibility" Value="Collapsed" />
+							<Style.Triggers>
+								<DataTrigger Binding="{Binding DataContext.IsNamingReportRunning, ElementName=ReportRoot}" Value="True">
+									<Setter Property="Visibility" Value="Visible" />
+								</DataTrigger>
+							</Style.Triggers>
+						</Style>
+					</TextBlock.Style>
+				</TextBlock>
+			<DockPanel Margin="0,7,0,0">
+				<Button x:Name="ResetSearchButton" DockPanel.Dock="Right" Content="Reset filters" Margin="8,0,0,0" Click="ResetSearch" />
+				<Border Background="{DynamicResource WindowBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="2">
+					<DockPanel>
+						<TextBlock Text="SEARCH" FontSize="9" FontWeight="Bold" Foreground="{DynamicResource MutedTextBrush}" VerticalAlignment="Center" Margin="10,0,2,0" />
+						<TextBox x:Name="SearchBox" BorderThickness="0" Background="Transparent" Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged, Delay=300}" ToolTip="Search names, projects, paths, styles, severity or diagnostic text" AutomationProperties.Name="Search all naming report sections" />
+					</DockPanel>
+				</Border>
+			</DockPanel>
+			<Expander Header="Refine results" Margin="0,6,0,0" Padding="10,6" Background="{DynamicResource SurfaceBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" AutomationProperties.Name="Naming report filters">
+				<ScrollViewer MaxHeight="140" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+				<StackPanel>
+					<TextBlock Text="Filters apply where the information is available. Unscoped patterns and diagnostics with unknown projects remain visible." TextWrapping="Wrap" />
+					<WrapPanel>
+						<StackPanel Margin="0,4,8,0"><TextBlock Text="Project" /><ComboBox MinWidth="120" ItemsSource="{Binding ProjectOptions}" DisplayMemberPath="Label" SelectedValuePath="Value" SelectedValue="{Binding ProjectFilter, Mode=TwoWay}" AutomationProperties.Name="Filter by project" /></StackPanel>
+						<StackPanel Margin="0,4,8,0"><TextBlock Text="Language" /><ComboBox x:Name="LanguageFilterBox" MinWidth="100" ItemsSource="{Binding LanguageOptions}" DisplayMemberPath="Label" SelectedValuePath="Value" SelectedValue="{Binding LanguageFilter, Mode=TwoWay}" AutomationProperties.Name="Filter by language" /></StackPanel>
+						<StackPanel Margin="0,4,8,0"><TextBlock Text="Kind" /><ComboBox MinWidth="100" ItemsSource="{Binding KindOptions}" DisplayMemberPath="Label" SelectedValuePath="Value" SelectedValue="{Binding KindFilter, Mode=TwoWay}" AutomationProperties.Name="Filter by symbol kind" /></StackPanel>
+						<StackPanel Margin="0,4,8,0"><TextBlock Text="Role" /><ComboBox MinWidth="100" ItemsSource="{Binding RoleOptions}" DisplayMemberPath="Label" SelectedValuePath="Value" SelectedValue="{Binding RoleFilter, Mode=TwoWay}" AutomationProperties.Name="Filter by role" /></StackPanel>
+						<StackPanel Margin="0,4,8,0"><TextBlock Text="Style" /><ComboBox MinWidth="100" ItemsSource="{Binding StyleOptions}" DisplayMemberPath="Label" SelectedValuePath="Value" SelectedValue="{Binding StyleFilter, Mode=TwoWay}" AutomationProperties.Name="Filter by style" /></StackPanel>
+						<StackPanel Margin="0,4,8,0"><TextBlock Text="Severity" /><ComboBox MinWidth="100" ItemsSource="{Binding SeverityOptions}" DisplayMemberPath="Label" SelectedValuePath="Value" SelectedValue="{Binding SeverityFilter, Mode=TwoWay}" AutomationProperties.Name="Filter by severity" /></StackPanel>
+						<StackPanel Margin="0,4,8,0"><TextBlock Text="Project status" /><ComboBox MinWidth="100" ItemsSource="{Binding StatusOptions}" DisplayMemberPath="Label" SelectedValuePath="Value" SelectedValue="{Binding StatusFilter, Mode=TwoWay}" AutomationProperties.Name="Filter by project status" /></StackPanel>
+					</WrapPanel>
+				</StackPanel>
+				</ScrollViewer>
+			</Expander>
+			<TextBlock Text="{Binding ActiveFilters}" Margin="0,4,0,0" Foreground="{DynamicResource MutedTextBrush}" TextWrapping="Wrap" />
+			<TextBlock Text="{Binding Counts}" Margin="0,4,0,0" Foreground="{DynamicResource MutedTextBrush}" TextWrapping="Wrap" AutomationProperties.LiveSetting="Polite" />
+		</StackPanel>
+		<TabControl x:Name="ReportTabs" Grid.Row="2" Margin="8" Background="{DynamicResource WindowBrush}" Foreground="{DynamicResource TextBrush}">
+			<TabItem Header="Overview">
+				<ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+					<StackPanel Margin="8">
+						<Border Style="{StaticResource Card}">
+							<StackPanel>
+										<TextBlock Text="REPORT OVERVIEW" Style="{StaticResource Eyebrow}" />
+										<TextBlock Text="Observed naming conventions" FontSize="22" FontWeight="SemiBold" />
+										<TextBlock Text="Coverage, patterns and findings for this analysis run" Margin="0,2,0,12" Foreground="{DynamicResource MutedTextBrush}" />
+										<TextBlock Text="{Binding Result.Target.Path, TargetNullValue=Path unavailable, FallbackValue=Run an analysis to view a report.}" TextWrapping="Wrap" Foreground="{DynamicResource MutedTextBrush}" ToolTip="{Binding Result.Target.Path}" />
+										<TextBlock Text="{Binding Result.Target.Scope, StringFormat=Analysis scope: {0}}" FontWeight="SemiBold" Margin="0,6,0,0" />
+												<TextBlock Text="{Binding Result.Status, StringFormat=Analysis status: {0}}" FontWeight="SemiBold" Margin="0,4,0,0" />
+												<TextBlock Text="{Binding DataContext.LastNamingSettings, ElementName=ReportRoot}" TextWrapping="Wrap" Margin="0,4,0,0" />
+										<Border Padding="10,8" Margin="0,10,0,0" CornerRadius="6" Background="{DynamicResource RaisedBrush}" BorderBrush="{DynamicResource SeverityWarningBrush}" BorderThickness="1,0,0,1">
+											<Border.Style>
+												<Style TargetType="Border">
+													<Setter Property="Visibility" Value="Collapsed" />
+													<Style.Triggers>
+														<DataTrigger Binding="{Binding Result.Status}" Value="Partial"><Setter Property="Visibility" Value="Visible" /></DataTrigger>
+														<DataTrigger Binding="{Binding Result.Status}" Value="Failed"><Setter Property="Visibility" Value="Visible" /></DataTrigger>
+														<DataTrigger Binding="{Binding Result.Status}" Value="Canceled"><Setter Property="Visibility" Value="Visible" /></DataTrigger>
+													</Style.Triggers>
+												</Style>
+											</Border.Style>
+											<TextBlock Text="Analysis is incomplete and may omit projects or files. Review diagnostics before drawing conclusions." TextWrapping="Wrap" />
+										</Border>
+								<TextBlock Text="Run an analysis to view results." Margin="0,4,0,0">
+									<TextBlock.Style><Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}"><Setter Property="Visibility" Value="Collapsed" /><Style.Triggers><DataTrigger Binding="{Binding Result}" Value="{x:Null}"><Setter Property="Visibility" Value="Visible" /></DataTrigger></Style.Triggers></Style></TextBlock.Style>
+								</TextBlock>
+								<TextBlock Text="Analysis is incomplete. Review diagnostics for details." FontWeight="Bold" TextWrapping="Wrap" Margin="0,4,0,0">
+									<TextBlock.Style><Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}"><Setter Property="Visibility" Value="Collapsed" /><Style.Triggers><DataTrigger Binding="{Binding Result.Status}" Value="Partial"><Setter Property="Visibility" Value="Visible" /></DataTrigger><DataTrigger Binding="{Binding Result.Status}" Value="Failed"><Setter Property="Visibility" Value="Visible" /></DataTrigger><DataTrigger Binding="{Binding Result.Status}" Value="Canceled"><Setter Property="Visibility" Value="Visible" /></DataTrigger></Style.Triggers></Style></TextBlock.Style>
+								</TextBlock>
+							</StackPanel>
+						</Border>
+						<TextBlock Text="AT A GLANCE" Style="{StaticResource Eyebrow}" Margin="6,12,0,2" />
+						<WrapPanel>
+							<Border Style="{StaticResource MetricCard}"><StackPanel><TextBlock Text="{Binding Result.Statistics.FileCount, TargetNullValue=—}" FontSize="24" FontWeight="SemiBold" /><TextBlock Text="FILES CONSIDERED" FontSize="10" Foreground="{DynamicResource MutedTextBrush}" /></StackPanel></Border>
+							<Border Style="{StaticResource MetricCard}"><StackPanel><TextBlock Text="{Binding Result.Statistics.ParsedFileCount, TargetNullValue=—}" FontSize="24" FontWeight="SemiBold" /><TextBlock Text="FILES PARSED" FontSize="10" Foreground="{DynamicResource MutedTextBrush}" /></StackPanel></Border>
+							<Border Style="{StaticResource MetricCard}"><StackPanel><TextBlock Text="{Binding Result.Statistics.IdentifierCount, TargetNullValue=—}" FontSize="24" FontWeight="SemiBold" /><TextBlock Text="NAMES OBSERVED" FontSize="10" Foreground="{DynamicResource MutedTextBrush}" /></StackPanel></Border>
+							<Border Style="{StaticResource MetricCard}"><StackPanel><TextBlock Text="{Binding Result.Statistics.DeclarationCount, TargetNullValue=—}" FontSize="24" FontWeight="SemiBold" /><TextBlock Text="DECLARATIONS" FontSize="10" Foreground="{DynamicResource MutedTextBrush}" /></StackPanel></Border>
+							<Border Style="{StaticResource MetricCard}"><StackPanel><TextBlock Text="{Binding Result.Statistics.ReferenceCount, TargetNullValue=—}" FontSize="24" FontWeight="SemiBold" /><TextBlock Text="REFERENCES OBSERVED" FontSize="10" Foreground="{DynamicResource MutedTextBrush}" /></StackPanel></Border>
+							<Border Style="{StaticResource MetricCard}"><StackPanel><TextBlock Text="{Binding Result.Statistics.ViolationCount, TargetNullValue=—}" FontSize="24" FontWeight="SemiBold" /><TextBlock Text="VIOLATIONS" FontSize="10" Foreground="{DynamicResource MutedTextBrush}" /></StackPanel></Border>
+							<Border Style="{StaticResource MetricCard}"><StackPanel><TextBlock Text="{Binding Result.Statistics.ExcludedCount, TargetNullValue=—}" FontSize="24" FontWeight="SemiBold" /><TextBlock Text="EXCLUDED OBSERVATIONS" FontSize="10" Foreground="{DynamicResource MutedTextBrush}" /></StackPanel></Border>
+							<Border Style="{StaticResource MetricCard}"><StackPanel><TextBlock Text="{Binding Result.Diagnostics.Count, TargetNullValue=—}" FontSize="24" FontWeight="SemiBold" /><TextBlock Text="DIAGNOSTICS" FontSize="10" Foreground="{DynamicResource MutedTextBrush}" /></StackPanel></Border>
+						</WrapPanel>
+						<TextBlock Margin="8" TextWrapping="Wrap" Foreground="{DynamicResource MutedTextBrush}" Text="Patterns are observed conventions, not authoritative rules. Confidence measures consistency, not correctness. C# references are not resolved in the current analysis; a zero count does not mean none exist. Files not parsed may include exclusions." />
+						<TextBlock Text="DISTRIBUTIONS" Style="{StaticResource Eyebrow}" Margin="6,12,0,2" />
+						<WrapPanel>
+							<Border Style="{StaticResource Card}" MinWidth="220" MaxWidth="320"><StackPanel><TextBlock Text="Symbols by kind" Style="{StaticResource Heading}" /><ItemsControl ItemsSource="{Binding KindChart}" ItemTemplate="{StaticResource DistributionBarTemplate}" /><TextBlock Text="Counts of observed symbol kinds" FontSize="10" Foreground="{DynamicResource MutedTextBrush}" Margin="0,6,0,0" /></StackPanel></Border>
+							<Border Style="{StaticResource Card}" MinWidth="220" MaxWidth="320"><StackPanel><TextBlock Text="Names by role" Style="{StaticResource Heading}" /><ItemsControl ItemsSource="{Binding RoleChart}" ItemTemplate="{StaticResource DistributionBarTemplate}" /><TextBlock Text="Role classifications in this result" FontSize="10" Foreground="{DynamicResource MutedTextBrush}" Margin="0,6,0,0" /></StackPanel></Border>
+							<Border Style="{StaticResource Card}" MinWidth="220" MaxWidth="320"><StackPanel><TextBlock Text="Observed naming styles" Style="{StaticResource Heading}" /><ItemsControl ItemsSource="{Binding StyleChart}" ItemTemplate="{StaticResource DistributionBarTemplate}" /><TextBlock Text="Observed style counts; not policy compliance" FontSize="10" Foreground="{DynamicResource MutedTextBrush}" Margin="0,6,0,0" /></StackPanel></Border>
+							<Border Style="{StaticResource Card}" MinWidth="220" MaxWidth="320"><StackPanel><TextBlock Text="Common tokens" Style="{StaticResource Heading}" /><ItemsControl ItemsSource="{Binding TopTokens}"><ItemsControl.ItemsPanel><ItemsPanelTemplate><WrapPanel /></ItemsPanelTemplate></ItemsControl.ItemsPanel><ItemsControl.ItemTemplate><DataTemplate><Border Background="{DynamicResource RaisedBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="5" Padding="7,4" Margin="2"><TextBlock><Run Text="{Binding Key, Mode=OneWay}" /><Run Text="  " /><Run Text="{Binding Value, Mode=OneWay}" FontWeight="SemiBold" /></TextBlock></Border></DataTemplate></ItemsControl.ItemTemplate></ItemsControl><TextBlock Text="Frequent name components" FontSize="10" Foreground="{DynamicResource MutedTextBrush}" Margin="0,6,0,0" /></StackPanel></Border>
+						</WrapPanel>
+						<WrapPanel>
+							<Border Style="{StaticResource Card}" MinWidth="280" MaxWidth="600"><StackPanel><TextBlock Text="OBSERVED CONVENTIONS" Style="{StaticResource Eyebrow}" /><TextBlock Text="Patterns inferred for this scope; project-level patterns can differ." TextWrapping="Wrap" Foreground="{DynamicResource MutedTextBrush}" Margin="0,0,0,8" /><ItemsControl ItemsSource="{Binding Result.Patterns}" MaxHeight="170"><ItemsControl.ItemTemplate><DataTemplate><Border BorderBrush="{DynamicResource BorderBrush}" BorderThickness="0,0,0,1" Padding="0,7"><Grid><Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions><StackPanel><TextBlock><Run Text="{Binding Scope.SymbolKind, Mode=OneWay}" /><Run Text=" / " /><Run Text="{Binding Scope.Language, Mode=OneWay}" /></TextBlock><TextBlock Text="{Binding DominantStyle}" FontWeight="SemiBold" /><TextBlock Text="{Binding Scope.ProjectName, TargetNullValue=Solution scope, FallbackValue=Solution scope}" FontSize="10" Foreground="{DynamicResource MutedTextBrush}" /></StackPanel><StackPanel Grid.Column="1" HorizontalAlignment="Right"><TextBlock Text="{Binding DominancePercentage, StringFormat=P0}" FontWeight="SemiBold" HorizontalAlignment="Right" /><TextBlock Text="dominance" FontSize="10" Foreground="{DynamicResource MutedTextBrush}" HorizontalAlignment="Right" /></StackPanel></Grid></Border></DataTemplate></ItemsControl.ItemTemplate></ItemsControl></StackPanel></Border>
+							<Border Style="{StaticResource Card}" MinWidth="220" MaxWidth="420"><StackPanel><TextBlock Text="REPORT OUTPUTS" Style="{StaticResource Eyebrow}" /><TextBlock Text="Export a summary JSON report or violations CSV. These exports do not contain all names and project details." TextWrapping="Wrap" Foreground="{DynamicResource MutedTextBrush}" /><Button Content="Export summary JSON / violations CSV" HorizontalAlignment="Left" Margin="0,10,0,0" Command="{Binding DataContext.ExportNamingCommand, ElementName=ReportRoot}" /></StackPanel></Border>
+						</WrapPanel>
+
+					</StackPanel>
+				</ScrollViewer>
+			</TabItem>
+			<TabItem Header="Violations">
+				<Grid><Grid.RowDefinitions><RowDefinition Height="2*" /><RowDefinition Height="*" /></Grid.RowDefinitions>
+		<DataGrid ItemsSource="{Binding Violations}" SelectedItem="{Binding SelectedViolation}" MouseDoubleClick="OpenSelectedSource" AutomationProperties.Name="Naming violations">
+						<DataGrid.Columns>
+							<DataGridTemplateColumn Header="Severity" Width="105"><DataGridTemplateColumn.CellTemplate><DataTemplate><Border Padding="7,3" CornerRadius="10" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" HorizontalAlignment="Left"><TextBlock Text="{Binding Severity}" Style="{StaticResource SeverityText}" /></Border></DataTemplate></DataGridTemplateColumn.CellTemplate></DataGridTemplateColumn><DataGridTextColumn Header="Name" Binding="{Binding Name}" /><DataGridTextColumn Header="Actual" Binding="{Binding ActualStyle}" /><DataGridTextColumn Header="Expected" Binding="{Binding ExpectedStyle}" /><DataGridTextColumn Header="Confidence" Binding="{Binding Confidence, StringFormat=P0}" /><DataGridTextColumn Header="Suggestion" Binding="{Binding SuggestedName}" /><DataGridTextColumn Header="Project" Binding="{Binding Project.Name}" /><DataGridTextColumn Header="File" Binding="{Binding Location.FilePath}" /><DataGridTextColumn Header="Line" Binding="{Binding Location.StartLine}" />
+						</DataGrid.Columns>
+					</DataGrid>
+					<TextBlock x:Name="ViolationsEmptyState" Style="{StaticResource SectionEmptyState}" Tag="{Binding ViolationsState}" AutomationProperties.LiveSetting="Polite" />
+					<Border Grid.Row="1" Style="{StaticResource Card}"><ScrollViewer VerticalScrollBarVisibility="Auto"><StackPanel>
+						<TextBlock Text="Violation details" Style="{StaticResource Heading}" /><TextBlock Text="{Binding SelectedViolation.Message, TargetNullValue=Select a violation to inspect its details.}" TextWrapping="Wrap" /><TextBlock Text="{Binding SelectedViolation.SuggestedName, StringFormat=Suggested name (advisory): {0}, TargetNullValue=Suggested name: Unavailable}" Margin="0,4" /><TextBlock Text="{Binding SelectedViolation.Location.FilePath, TargetNullValue=Source location: Unavailable}" TextWrapping="Wrap" /><TextBlock Text="{Binding SelectedViolation.Location.StartLine, StringFormat=Line: {0}, TargetNullValue=Line: Unavailable}" />
+						<WrapPanel><Button Content="Open source" Click="OpenViolationSource" Margin="0,6,6,0" /><Button Content="Related name" Click="ShowRelatedObservation" Margin="0,6,6,0" /><Button Content="Related pattern" Click="ShowRelatedPattern" Margin="0,6,6,0" /></WrapPanel>
+					</StackPanel></ScrollViewer></Border>
+				</Grid>
+			</TabItem>
+			<TabItem Header="Patterns">
+				<Grid><Grid.RowDefinitions><RowDefinition Height="Auto" /><RowDefinition Height="2*" /><RowDefinition Height="*" /></Grid.RowDefinitions>
+					<TextBlock Text="Patterns below are inferred for the report's analyzed scope. Project results have separately inferred patterns." TextWrapping="Wrap" Margin="4" />
+					<DataGrid Grid.Row="1" ItemsSource="{Binding Patterns}" SelectedItem="{Binding SelectedPattern}"><DataGrid.Columns>
+						<DataGridTextColumn Header="Project scope" Binding="{Binding Scope.ProjectName, TargetNullValue=Analyzed scope}" /><DataGridTextColumn Header="Kind" Binding="{Binding Scope.SymbolKind}" /><DataGridTextColumn Header="Language" Binding="{Binding Scope.Language}" /><DataGridTextColumn Header="Style" Binding="{Binding DominantStyle}" /><DataGridTextColumn Header="Names" Binding="{Binding ObservationCount}" /><DataGridTextColumn Header="Matching" Binding="{Binding MatchingCount}" /><DataGridTextColumn Header="Other" Binding="{Binding NonMatchingCount}" /><DataGridTextColumn Header="Dominance" Binding="{Binding DominancePercentage, StringFormat=P0}" /><DataGridTextColumn Header="Confidence" Binding="{Binding Confidence, StringFormat=P0}" /><DataGridCheckBoxColumn Header="Mixed" Binding="{Binding IsMixed}" /><DataGridCheckBoxColumn Header="Insufficient evidence" Binding="{Binding HasInsufficientEvidence}" />
+					</DataGrid.Columns></DataGrid>
+					<TextBlock Grid.Row="1" Style="{StaticResource SectionEmptyState}" Tag="{Binding PatternsState}" AutomationProperties.LiveSetting="Polite" />
+					<Border Grid.Row="2" Style="{StaticResource Card}"><ScrollViewer VerticalScrollBarVisibility="Auto"><StackPanel><TextBlock Text="Pattern details" Style="{StaticResource Heading}" /><TextBlock Text="{Binding SelectedPattern.Id, TargetNullValue=Select a pattern to inspect its details.}" /><TextBlock Text="{Binding SelectedPattern.Confidence, StringFormat=Confidence: {0:P0}}" /><TextBlock Text="{Binding SelectedPattern.DominancePercentage, StringFormat=Dominance: {0:P0}}" /><TextBlock Text="Common prefixes:" Margin="0,6,0,0" /><ItemsControl ItemsSource="{Binding SelectedPattern.CommonPrefixes}" /><TextBlock Text="Common suffixes:" Margin="0,6,0,0" /><ItemsControl ItemsSource="{Binding SelectedPattern.CommonSuffixes}" /><TextBlock Text="Related names:" Margin="0,6,0,0" /><ListBox ItemsSource="{Binding PatternObservations}" DisplayMemberPath="Name" Height="150" ScrollViewer.CanContentScroll="True" VirtualizingPanel.IsVirtualizing="True" VirtualizingPanel.VirtualizationMode="Recycling" AutomationProperties.Name="Names related to the selected pattern" /></StackPanel></ScrollViewer></Border>
+				</Grid>
+			</TabItem>
+			<TabItem Header="Names">
+				<Grid><Grid.RowDefinitions><RowDefinition Height="2*" /><RowDefinition Height="*" /></Grid.RowDefinitions>
+					<DataGrid ItemsSource="{Binding Observations}" SelectedItem="{Binding SelectedObservation}" MouseDoubleClick="OpenSelectedSource"><DataGrid.Columns>
+						<DataGridTextColumn Header="Name" Binding="{Binding Name}" /><DataGridTextColumn Header="Kind" Binding="{Binding Kind}" /><DataGridTextColumn Header="Role" Binding="{Binding Role}" /><DataGridTextColumn Header="Language" Binding="{Binding Language}" /><DataGridTextColumn Header="Style" Binding="{Binding Classification.Style}" /><DataGridTextColumn Header="Confidence" Binding="{Binding Classification.Confidence, StringFormat=P0}" /><DataGridTextColumn Header="Project" Binding="{Binding SourceFile.Project.Name}" /><DataGridTextColumn Header="File" Binding="{Binding Location.FilePath}" /><DataGridTextColumn Header="Line" Binding="{Binding Location.StartLine}" />
+					</DataGrid.Columns></DataGrid>
+					<TextBlock Style="{StaticResource SectionEmptyState}" Tag="{Binding ObservationsState}" AutomationProperties.LiveSetting="Polite" />
+					<Border Grid.Row="1" Style="{StaticResource Card}"><ScrollViewer VerticalScrollBarVisibility="Auto"><StackPanel><TextBlock Text="Name details" Style="{StaticResource Heading}" /><TextBlock Text="{Binding SelectedObservation.NormalizedName, StringFormat=Normalized: {0}, TargetNullValue=Select a name to inspect its details.}" /><TextBlock Text="{Binding SelectedObservation.Namespace, StringFormat=Namespace: {0}}" /><TextBlock Text="{Binding SelectedObservation.ContainingType, StringFormat=Containing type: {0}}" /><TextBlock Text="{Binding SelectedObservation.IsExcluded, StringFormat=Excluded: {0}}" /><TextBlock Text="{Binding SelectedObservation.ExclusionReason, StringFormat=Exclusion reason: {0}}" /><TextBlock Text="{Binding SelectedObservation.Classification.Tokenization.Prefix, StringFormat=Prefix: {0}}" /><TextBlock Text="{Binding SelectedObservation.Classification.Tokenization.Suffix, StringFormat=Suffix: {0}}" /><TextBlock Text="{Binding SelectedObservation.Classification.Tokenization.ContainsAcronym, StringFormat=Contains acronym: {0}}" /><TextBlock Text="{Binding SelectedObservation.Classification.Tokenization.ContainsNumericToken, StringFormat=Contains numeric token: {0}}" /><TextBlock Text="Separators:" /><ItemsControl ItemsSource="{Binding SelectedObservation.Classification.Tokenization.Separators}" /><TextBlock Text="Tokens:" /><ItemsControl ItemsSource="{Binding SelectedObservation.Classification.Tokenization.Tokens}" /><Button Content="Open source" HorizontalAlignment="Left" Click="OpenObservationSource" /></StackPanel></ScrollViewer></Border>
+				</Grid>
+			</TabItem>
+			<TabItem Header="Projects and files">
+				<Grid><Grid.RowDefinitions><RowDefinition Height="*" /><RowDefinition Height="*" /></Grid.RowDefinitions>
+					<local:NamingHierarchyControl x:Name="ProjectHierarchy" SourceNavigationRequested="OpenHierarchySource" />
+					<TabControl Grid.Row="1" Margin="4">
+						<TabItem Header="Project details">
+							<ScrollViewer VerticalScrollBarVisibility="Auto"><StackPanel Margin="8">
+								<TextBlock Text="{Binding SelectedProject.Project.Name, TargetNullValue=Select a project to inspect its details.}" Style="{StaticResource Heading}" />
+								<TextBlock Text="{Binding SelectedProject.Project.FilePath}" TextWrapping="Wrap" />
+								<TextBlock Text="Target frameworks:" Margin="0,5,0,0" /><ItemsControl ItemsSource="{Binding SelectedProject.Project.TargetFrameworks}" />
+								<TextBlock Text="Dependencies:" Margin="0,5,0,0" /><ItemsControl ItemsSource="{Binding SelectedProject.Dependencies}" />
+							</StackPanel></ScrollViewer>
+						</TabItem>
+						<TabItem Header="Known files">
+							<Grid><Grid.RowDefinitions><RowDefinition Height="Auto" /><RowDefinition Height="*" /></Grid.RowDefinitions>
+								<TextBlock Text="Individual file outcomes are not recorded." Margin="4" />
+								<DataGrid Grid.Row="1" ItemsSource="{Binding SelectedProject.Result.Files}"><DataGrid.Columns>
+									<DataGridTextColumn Header="Path" Binding="{Binding Path}" /><DataGridTextColumn Header="Language" Binding="{Binding Language}" /><DataGridCheckBoxColumn Header="Generated" Binding="{Binding IsGenerated}" />
+								</DataGrid.Columns></DataGrid>
+							</Grid>
+						</TabItem>
+						<TabItem Header="Project patterns">
+							<DataGrid ItemsSource="{Binding SelectedProject.Result.Patterns}"><DataGrid.Columns>
+								<DataGridTextColumn Header="Kind" Binding="{Binding Scope.SymbolKind}" /><DataGridTextColumn Header="Language" Binding="{Binding Scope.Language}" /><DataGridTextColumn Header="Style" Binding="{Binding DominantStyle}" /><DataGridTextColumn Header="Names" Binding="{Binding ObservationCount}" /><DataGridTextColumn Header="Matching" Binding="{Binding MatchingCount}" /><DataGridTextColumn Header="Other" Binding="{Binding NonMatchingCount}" /><DataGridTextColumn Header="Dominance" Binding="{Binding DominancePercentage, StringFormat=P0}" /><DataGridTextColumn Header="Confidence" Binding="{Binding Confidence, StringFormat=P0}" /><DataGridCheckBoxColumn Header="Mixed" Binding="{Binding IsMixed}" /><DataGridCheckBoxColumn Header="Insufficient evidence" Binding="{Binding HasInsufficientEvidence}" />
+							</DataGrid.Columns></DataGrid>
+						</TabItem>
+						<TabItem Header="Project violations">
+							<DataGrid ItemsSource="{Binding SelectedProject.Result.Violations}" MouseDoubleClick="OpenSelectedSource"><DataGrid.Columns>
+								<DataGridTextColumn Header="Severity" Binding="{Binding Severity}" /><DataGridTextColumn Header="Name" Binding="{Binding Name}" /><DataGridTextColumn Header="Actual" Binding="{Binding ActualStyle}" /><DataGridTextColumn Header="Expected" Binding="{Binding ExpectedStyle}" /><DataGridTextColumn Header="Confidence" Binding="{Binding Confidence, StringFormat=P0}" /><DataGridTextColumn Header="Suggestion" Binding="{Binding SuggestedName}" /><DataGridTextColumn Header="Reason" Binding="{Binding Message}" /><DataGridTextColumn Header="File" Binding="{Binding Location.FilePath}" /><DataGridTextColumn Header="Line" Binding="{Binding Location.StartLine}" />
+							</DataGrid.Columns></DataGrid>
+						</TabItem>
+						<TabItem Header="Project diagnostics">
+							<DataGrid ItemsSource="{Binding SelectedProject.Diagnostics}" MouseDoubleClick="OpenSelectedSource"><DataGrid.Columns>
+								<DataGridTextColumn Header="Severity" Binding="{Binding Severity}" /><DataGridTextColumn Header="Code" Binding="{Binding Code}" /><DataGridTextColumn Header="Message" Binding="{Binding Message}" /><DataGridTextColumn Header="Detail" Binding="{Binding Detail}" /><DataGridTextColumn Header="File" Binding="{Binding Location.FilePath}" /><DataGridTextColumn Header="Line" Binding="{Binding Location.StartLine}" />
+							</DataGrid.Columns></DataGrid>
+						</TabItem>
+					</TabControl>
+				</Grid>
+			</TabItem>
+			<TabItem Header="Diagnostics">
+				<Grid>
+					<Grid.RowDefinitions><RowDefinition Height="2*" /><RowDefinition Height="*" /></Grid.RowDefinitions>
+					<DataGrid ItemsSource="{Binding Diagnostics}" SelectedItem="{Binding SelectedDiagnostic}" MouseDoubleClick="OpenSelectedSource" AutomationProperties.Name="Naming analysis diagnostics">
+						<DataGrid.Columns><DataGridTemplateColumn Header="Severity" Width="105"><DataGridTemplateColumn.CellTemplate><DataTemplate><Border Padding="7,3" CornerRadius="10" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" HorizontalAlignment="Left"><TextBlock Text="{Binding Severity}" Style="{StaticResource SeverityText}" /></Border></DataTemplate></DataGridTemplateColumn.CellTemplate></DataGridTemplateColumn><DataGridTextColumn Header="Code" Binding="{Binding Code}" /><DataGridTextColumn Header="Message" Binding="{Binding Message}" /><DataGridTextColumn Header="Project" Binding="{Binding ProjectPath, TargetNullValue=Unavailable}" /><DataGridTextColumn Header="File" Binding="{Binding Location.FilePath, TargetNullValue=Unavailable, FallbackValue=Unavailable}" /><DataGridTextColumn Header="Line" Binding="{Binding Location.StartLine, TargetNullValue=Unavailable, FallbackValue=Unavailable}" /></DataGrid.Columns>
+					</DataGrid>
+					<TextBlock Style="{StaticResource SectionEmptyState}" Tag="{Binding DiagnosticsState}" AutomationProperties.LiveSetting="Polite" />
+					<Border Grid.Row="1" Style="{StaticResource Card}"><ScrollViewer><StackPanel><TextBlock Text="Diagnostic details" Style="{StaticResource Heading}" /><TextBlock Text="{Binding SelectedDiagnostic.Message, TargetNullValue=Select a diagnostic to inspect its details.}" TextWrapping="Wrap" /><TextBlock Text="{Binding SelectedDiagnostic.Detail, TargetNullValue=Detail unavailable}" TextWrapping="Wrap" /><Button Content="Open source" HorizontalAlignment="Left" Click="OpenDiagnosticSource" /></StackPanel></ScrollViewer></Border>
+				</Grid>
+			</TabItem>
+		</TabControl>
+	</Grid>
+</UserControl>

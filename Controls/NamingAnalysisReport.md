@@ -1,0 +1,11 @@
+# Naming analysis report
+
+Open the **Naming Analysis** tool window and run analysis for the solution or the project selected in Solution Explorer. **Run again** repeats the last displayed result's scope using the current settings. **Settings** affects future runs only and lasts for the current application session; the overview records the effective settings of the displayed run. Failed or canceled runs retain and identify the previous result, if one exists.
+
+The report searches across its sections. The Filters panel offers project, language, kind, role, style, severity and project-status filters. A filter only applies to sections with the corresponding information. Violations use the linked observation for language, kind, role and a missing project, when available. Solution-wide patterns and diagnostics with unknown projects remain visible when filtering by project. The project hierarchy filters the project list; expanded project-level details are not filtered by the report-wide filters. Reset clears all filters. Counts show visible and total rows; zero findings do not establish completeness or compliance.
+
+Patterns are observed conventions, not authoritative rules. Project-level patterns are inferred independently from solution-level patterns. A mixed or insufficient-evidence pattern should not be treated as a definitive convention. Suggestions are advisory and do not rename code. The overview lists the 20 most frequent tokens, prefixes and suffixes; the counts are for the complete analyzed scope, not the current filters.
+
+Use the source action or double-click a result with an available path and line to open it. In the project hierarchy, Enter also opens the selected source. Missing locations are reported rather than inferred. Partial and failed analyses can omit projects or files; inspect diagnostics before drawing conclusions. A file that was not parsed may have been excluded, not failed. C# references are not semantically resolved by the current analyzer, so a zero reference count does not mean none exist.
+
+The export command writes either a summary JSON projection or a violations CSV. Neither export contains every observation and project detail displayed in the live report. No completion timestamp, complete file outcome list, or reliable suppressed-finding count is currently recorded.
